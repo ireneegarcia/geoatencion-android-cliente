@@ -18,7 +18,7 @@
         android:layout_width="53dp"
         android:layout_height="69dp"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        app:srcCompat="@drawable/placeholders" />
+        app:srcCompat="@drawable/logo_icono" />
 
     <TextView
         android:layout_width="match_parent"
