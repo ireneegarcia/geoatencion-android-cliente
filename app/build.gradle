@@ -39,6 +39,7 @@ dependencies {
     compile('org.apache.httpcomponents:httpmime:4.3.1') {
         exclude module: 'httpclient'
     }
+    compile files('libs/httpclient-4.5.2.jar')
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.loopj.android:android-async-http:1.4.9'
@@ -49,5 +50,4 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:support-v4:26.+'
     testCompile 'junit:junit:4.12'
-    compile files('libs/httpclient-4.5.2.jar')
 }
