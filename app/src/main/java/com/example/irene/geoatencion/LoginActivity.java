@@ -3,23 +3,22 @@ package com.example.irene.geoatencion;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
-
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,6 +31,12 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import Model.Users;
+import Remote.APIService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -62,6 +67,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+
+    private APIService mAPIService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -297,6 +304,31 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         int IS_PRIMARY = 1;
     }
 
+    public void login(String usernameOrEmail,String password){
+
+
+
+        Log.d("myTag", "--->oki ");
+        APIService.Factory.getIntance().login(usernameOrEmail, password).enqueue(new Callback<Users>() {
+            @Override
+            public void onResponse(Call<Users> call, Response<Users> response) {
+                Log.d("myTag", "--->bien " + call.request().url());
+
+                if(response.isSuccessful()) {
+                    Log.d("myTag", "--->on reponse " + response.body().toString());
+                    Log.d("myTag", "--->on reponse " + call.request().url());
+                    //showResponse(response.body().toString());
+                    //Log.d("myTag", "This is my message");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Users> call, Throwable t) {
+               // Log.d("myTag", "This is my message on failure " + t.toString());
+                Log.d("myTag", "This is my message on failure " + call.request().url());
+            }
+        });
+    }
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
@@ -317,6 +349,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             try {
                 // Simulate network access.
+
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
                 return false;
@@ -340,6 +373,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
+                login(mEmail,mPassword);
+
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
                 //finish();
