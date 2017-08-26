@@ -1,67 +1,91 @@
 package Model;
 
-import java.util.ArrayList;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by Irene on 19/8/2017.
  */
 
 public class CategoriaServicios {
-    private String Id;
-    private String Name;
-    private String Icon;
+
+
+    @SerializedName("_id")
+    @Expose
+    private String id;
+    @SerializedName("user")
+    @Expose
+    private User user;
+    @SerializedName("__v")
+    @Expose
+    private Integer v;
+    @SerializedName("created")
+    @Expose
+    private String created;
+    @SerializedName("iconUrl")
+    @Expose
+    private String iconUrl;
+    @SerializedName("category")
+    @Expose
+    private String category;
 
     public String getId() {
-        return Id;
+        return id;
     }
 
     public void setId(String id) {
-        Id = id;
+        this.id = id;
     }
 
-    public String getName() {
-        return Name;
+    public User getUser() {
+        return user;
     }
 
-    public void setName(String name) {
-        Name = name;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public String getIcon() {
-        return Icon;
+    public Integer getV() {
+        return v;
     }
 
-    public void setIcon(String icon) {
-        Icon = icon;
+    public void setV(Integer v) {
+        this.v = v;
     }
 
-    public static ArrayList<CategoriaServicios> get(){
-        ArrayList<CategoriaServicios> items = new ArrayList<CategoriaServicios>();
-        CategoriaServicios item = new CategoriaServicios();
-        item.setId("1");
-        item.setName("BOD");
-        items.add(item);
+    public String getCreated() {
+        return created;
+    }
 
-        /*item = new Bank();
-        item.setCode("0002");
-        item.setName("BNC");
-        items.add(item);
+    public void setCreated(String created) {
+        this.created = created;
+    }
 
-        item = new Bank();
-        item.setCode("003");
-        item.setName("BANESCO");
-        items.add(item);
+    public String getIconUrl() {
+        return iconUrl;
+    }
 
-        item = new Bank();
-        item.setCode("0004");
-        item.setName("BVBA");
-        items.add(item);
+    public void setIconUrl(String iconUrl) {
+        this.iconUrl = iconUrl;
+    }
 
-        item = new Bank();
-        item.setCode("0005");
-        item.setName("DEL SUR");
-        items.add(item);*/
+    public String getCategory() {
+        return category;
+    }
 
-        return items;
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    @Override
+    public String toString() {
+        return "CategoriaServicios{" +
+                "id='" + id + '\'' +
+                ", user=" + user +
+                ", v=" + v +
+                ", created='" + created + '\'' +
+                ", iconUrl='" + iconUrl + '\'' +
+                ", category='" + category + '\'' +
+                '}';
     }
 }

@@ -199,8 +199,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+            login(email,password);
+            // mAuthTask = new UserLoginTask(email, password);
+            //mAuthTask.execute((Void) null);
         }
     }
 
@@ -304,30 +305,36 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         int IS_PRIMARY = 1;
     }
 
-    public void login(String usernameOrEmail,String password){
+    public void login(String usernameOrEmail, String password){
 
-
-
-        Log.d("myTag", "--->oki ");
         APIService.Factory.getIntance().login(usernameOrEmail, password).enqueue(new Callback<Users>() {
             @Override
             public void onResponse(Call<Users> call, Response<Users> response) {
-                Log.d("myTag", "--->bien " + call.request().url());
-
+                //Log.d("myTag", "onresponse " + response.code());
+                if(response.code() == 422){
+                    Intent intent = new Intent (LoginActivity.this, LoginActivity.class);
+                    startActivityForResult(intent, 0);
+                    finish();
+                    mEmailView.setError(getString(R.string.error_invalid_email));
+                    mPasswordView.setError(getString(R.string.error_invalid_password));
+                }
                 if(response.isSuccessful()) {
-                    Log.d("myTag", "--->on reponse " + response.body().toString());
-                    Log.d("myTag", "--->on reponse " + call.request().url());
-                    //showResponse(response.body().toString());
-                    //Log.d("myTag", "This is my message");
+
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+
+                    //Log.d("myTag", "--->on reponse " + call.request().url());
+
                 }
             }
 
             @Override
-            public void onFailure(Call<Users> call, Throwable t) {
-               // Log.d("myTag", "This is my message on failure " + t.toString());
+            public void onFailure(Call<Users> call, Throwable t){
+                //
                 Log.d("myTag", "This is my message on failure " + call.request().url());
             }
         });
+
     }
     /**
      * Represents an asynchronous login/registration task used to authenticate
@@ -373,10 +380,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
-                login(mEmail,mPassword);
 
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
+
+
                 //finish();
                 /*mLoginFormView.setOnClickListener(new OnClickListener() {
                     @Override

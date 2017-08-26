@@ -3,19 +3,16 @@ package com.example.irene.geoatencion;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -26,6 +23,14 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.List;
+
+import Model.CategoriaServicios;
+import Remote.APIService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -52,8 +57,6 @@ public class MapsFragment extends Fragment {
         mView = inflater.inflate(R.layout.fragment_maps, container, false);
         c = (Context)getActivity();
 
-
-
         //View rootView = inflater.inflate(R.layout.fragment_maps, container, false);
 
         mMapView = (MapView) mView.findViewById(R.id.mapView);
@@ -65,6 +68,7 @@ public class MapsFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                listarCategorias();
                 AlertDialog alert = createSimpleDialog();
                 alert.show();
             }
@@ -155,6 +159,29 @@ public class MapsFragment extends Fragment {
         mMapView.onLowMemory();
     }
 
+    public void listarCategorias(){
+
+        Log.d("myTag", "--->oki ");
+        APIService.Factory.getIntance().list().enqueue(new Callback<List<CategoriaServicios>>() {
+            @Override
+            public void onResponse(Call<List<CategoriaServicios>> call, Response<List<CategoriaServicios>> response) {
+                Log.d("myTag", "--->bien " + call.request().url());
+
+                if(response.isSuccessful()) {
+                    Log.d("myTag", "--->on reponse " + response.body().toString());
+                    Log.d("myTag", "--->on reponse " + call.request().url());
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<CategoriaServicios>> call, Throwable t) {
+                Log.d("myTag", "This is my message on failure " + call.request().url());
+                Log.d("myTag", "This is my message on failure " + t.toString());
+            }
+        });
+    }
+
     public AlertDialog createSimpleDialog() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -162,6 +189,8 @@ public class MapsFragment extends Fragment {
 
         View layout = inflater.inflate(R.layout.layout_request, null);
         builder.setView(layout);
+
+
         /*TextView mTitle = (TextView) layout.findViewById(R.id.textViewTitle);
         TextView mAlert = (TextView) layout.findViewById(R.id.textViewAlert);
         Button mOk = (Button) layout.findViewById(R.id.buttonOk);

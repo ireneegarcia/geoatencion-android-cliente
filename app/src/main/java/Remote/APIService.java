@@ -3,8 +3,10 @@ package Remote;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import Model.CategoriaServicios;
 import Model.Users;
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -12,6 +14,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 
 
@@ -25,6 +28,11 @@ public interface APIService {
     @FormUrlEncoded
     Call<Users> login(@Field("usernameOrEmail") String username,
                        @Field("password") String password);
+
+    @GET("api/categoriaservicios")
+    //@FormUrlEncoded
+    Call<List<CategoriaServicios>> list();
+
 
     class Factory {
         private static APIService service;
