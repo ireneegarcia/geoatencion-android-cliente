@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -26,6 +27,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
 
+import Model.CategoriaAdapterListView;
 import Model.CategoriaServicios;
 import Remote.APIService;
 import retrofit2.Call;
@@ -41,7 +43,9 @@ public class MapsFragment extends Fragment {
 
     View mView;
     Context c;
+    ListView categorias;
 
+    List<CategoriaServicios> categoriaServicio;
     MapView mMapView;
     private GoogleMap googleMap;
 
@@ -63,12 +67,12 @@ public class MapsFragment extends Fragment {
         mMapView.onCreate(savedInstanceState);
 
         mMapView.onResume(); // needed to get the map to display immediately
-
+        listarCategorias();
         FloatingActionButton fab = (FloatingActionButton) mView.findViewById(R.id.request);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listarCategorias();
+
                 AlertDialog alert = createSimpleDialog();
                 alert.show();
             }
@@ -168,6 +172,7 @@ public class MapsFragment extends Fragment {
                 Log.d("myTag", "--->bien " + call.request().url());
 
                 if(response.isSuccessful()) {
+                    categoriaServicio = response.body();
                     Log.d("myTag", "--->on reponse " + response.body().toString());
                     Log.d("myTag", "--->on reponse " + call.request().url());
 
@@ -189,8 +194,9 @@ public class MapsFragment extends Fragment {
 
         View layout = inflater.inflate(R.layout.layout_request, null);
         builder.setView(layout);
-
-
+        categorias = (ListView) layout.findViewById(R.id.listViewCategorias);
+        CategoriaAdapterListView adapter = new CategoriaAdapterListView(c,categoriaServicio);
+        categorias.setAdapter(adapter);
         /*TextView mTitle = (TextView) layout.findViewById(R.id.textViewTitle);
         TextView mAlert = (TextView) layout.findViewById(R.id.textViewAlert);
         Button mOk = (Button) layout.findViewById(R.id.buttonOk);

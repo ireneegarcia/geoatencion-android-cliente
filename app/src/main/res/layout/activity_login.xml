@@ -52,7 +52,8 @@
                     android:hint="@string/prompt_email"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:text="admin01@gmail.com" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -70,7 +71,8 @@
                     android:imeOptions="actionUnspecified"
                     android:inputType="textPassword"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:text="123q123Q123-" />
 
             </android.support.design.widget.TextInputLayout>
 
