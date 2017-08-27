@@ -328,6 +328,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     SharedPreferences.Editor editor = sp.edit();
                     editor.putString("id", String.valueOf(response.body().getId()));
                     editor.putString("name", String.valueOf(response.body().getDisplayName()));
+                    editor.putString("phone", String.valueOf(response.body().getPhone()));
+                    editor.putString("email", String.valueOf(response.body().getEmail()));
+                    editor.putString("profileImage", String.valueOf(response.body().getProfileImageURL()));
                     editor.commit();
 
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);

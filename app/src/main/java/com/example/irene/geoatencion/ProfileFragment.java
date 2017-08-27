@@ -8,6 +8,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+
+import Model.Variables;
 
 
 public class ProfileFragment extends Fragment {
@@ -20,6 +26,15 @@ public class ProfileFragment extends Fragment {
         // Required empty public constructor
     }
 
+    public static class Profile
+    {
+        TextView name;
+        TextView phone;
+        TextView email;
+        ImageView profileImage;
+        //ImageView icon;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -30,7 +45,25 @@ public class ProfileFragment extends Fragment {
         SharedPreferences settings = getActivity().getSharedPreferences("perfil", c.MODE_PRIVATE);
         String mId = settings.getString("id", null);
         String mName = settings.getString("name", null);
+        String mPhone = settings.getString("phone", null);
+        String mEmail = settings.getString("email", null);
+        String mProfileImage = settings.getString("profileImage", null);
 
+        Profile view= new Profile();
+
+        view.name = (TextView) mView.findViewById(R.id.textView2);
+        view.phone = (TextView) mView.findViewById(R.id.textView3);
+        view.email = (TextView) mView.findViewById(R.id.textView5);
+        view.profileImage = (ImageView) mView.findViewById(R.id.imageView2);
+
+        view.name.setText(mName);
+        view.phone.setText(mPhone);
+        view.email.setText(mEmail);
+        Glide
+                .with(this.c)
+                .load(Variables.getUrl()+mProfileImage)
+                .error(R.drawable.logo_icono)
+                .into(view.profileImage);
         Log.d("my tag", mId+" "+mName);
         return mView;
     }
