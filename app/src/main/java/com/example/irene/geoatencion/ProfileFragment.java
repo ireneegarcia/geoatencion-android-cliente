@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +30,9 @@ public class ProfileFragment extends Fragment {
         TextView name;
         TextView phone;
         TextView email;
+        TextView address;
+        TextView latitude;
+        TextView longitude;
         ImageView profileImage;
         //ImageView icon;
     }
@@ -47,6 +49,9 @@ public class ProfileFragment extends Fragment {
         String mName = settings.getString("name", null);
         String mPhone = settings.getString("phone", null);
         String mEmail = settings.getString("email", null);
+        String mAddress = settings.getString("address", null);
+        String mLatitude = settings.getString("latitude", null);
+        String mLongitude = settings.getString("longitude", null);
         String mProfileImage = settings.getString("profileImage", null);
 
         Profile view= new Profile();
@@ -54,17 +59,18 @@ public class ProfileFragment extends Fragment {
         view.name = (TextView) mView.findViewById(R.id.textView2);
         view.phone = (TextView) mView.findViewById(R.id.textView3);
         view.email = (TextView) mView.findViewById(R.id.textView5);
+        view.address = (TextView) mView.findViewById(R.id.textView4);
         view.profileImage = (ImageView) mView.findViewById(R.id.imageView2);
 
         view.name.setText(mName);
         view.phone.setText(mPhone);
         view.email.setText(mEmail);
+        view.address.setText("\nMi dirección actual: "+mAddress +"\nMi ubicación actual: "+mLatitude+", "+mLongitude);
         Glide
                 .with(this.c)
                 .load(Variables.getUrl()+mProfileImage)
                 .error(R.drawable.logo_icono)
                 .into(view.profileImage);
-        Log.d("my tag", mId+" "+mName);
         return mView;
     }
 

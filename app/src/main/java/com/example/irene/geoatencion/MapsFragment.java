@@ -2,9 +2,19 @@ package com.example.irene.geoatencion;
 
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -21,11 +31,16 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.ui.IconGenerator;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import Model.CategoriaAdapterListView;
 import Model.CategoriaServicios;
@@ -48,6 +63,15 @@ public class MapsFragment extends Fragment {
     List<CategoriaServicios> categoriaServicio;
     MapView mMapView;
     private GoogleMap googleMap;
+
+    //Coordenadas de ubicación
+    private Location mCurrentLocation;
+
+    //Ultima vez en actualizar las coordenadas de ubicación
+    //Hora
+    private String mLastUpdateTime;
+    //fecha
+    private String mLastUpdateDate;
 
     public MapsFragment() {
         // Required empty public constructor
@@ -100,16 +124,12 @@ public class MapsFragment extends Fragment {
                     // for ActivityCompat#requestPermissions for more details.
                     return;
                 }
+                locationStart();
+
                 googleMap.setMyLocationEnabled(true);
+                googleMap.getUiSettings().setZoomControlsEnabled(true);
 
-                // For dropping a marker at a point on the Map
-                LatLng sydney = new LatLng(-34, 151);
-                googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker Title").snippet("Marker Description").icon(BitmapDescriptorFactory
-                        .defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
 
-                // For zooming automatically to the location of the marker
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(12).build();
-                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
             }
         });
 
@@ -137,6 +157,156 @@ public class MapsFragment extends Fragment {
                 .newCameraPosition(cameraPosition));
 
         return rootView;*/
+    }
+
+    private void agregarMarcador(String address){
+        // For dropping a marker at a point on the Map
+       // LatLng currentLatLng = new LatLng(loc.getLatitude(), loc.getLongitude());
+        MarkerOptions options = new MarkerOptions();
+        IconGenerator iconFactory = new IconGenerator(c);
+        iconFactory.setStyle(IconGenerator.STYLE_ORANGE);
+        options.icon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon(mLastUpdateTime)));
+        options.anchor(iconFactory.getAnchorU(), iconFactory.getAnchorV());
+        //options.title("Mi posición actual");
+        options.snippet(address);
+
+        LatLng currentLatLng = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+        options.position(currentLatLng);
+        Marker mapMarker = googleMap.addMarker(options);
+        long atTime = mCurrentLocation.getTime();
+        mLastUpdateTime = DateFormat.getTimeInstance().format(new Date(atTime));
+        mapMarker.setTitle("Mi posición actual");
+        Log.d("my tag", "Marcador añadido.............................");
+        // For zooming automatically to the location of the marker
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng,
+                17));
+        Log.d("my tag", "Zoom hecho.............................");
+
+        /*googleMap.addMarker(new MarkerOptions().position(currentLatLng)
+                .title("Mi posición actual")
+                .snippet(address)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));*/
+
+        // For zooming automatically to the location of the marker
+        //CameraPosition cameraPosition = new CameraPosition.Builder().target(currentLatLng).zoom(12).build();
+       // googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+    }
+
+    private void locationStart() {
+        LocationManager mlocManager = (LocationManager) c.getSystemService(Context.LOCATION_SERVICE);
+        Localizacion Local = new Localizacion();
+       // Local.setMainActivity(c);
+        final boolean gpsEnabled = mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        if (!gpsEnabled) {
+            Intent settingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(settingsIntent);
+        }
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions((Activity) c, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
+            return;
+        }
+        mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, (LocationListener) Local);
+        mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, (LocationListener) Local);
+
+       // mensaje1.setText("Localizacion agregada");
+       // mensaje2.setText("");
+        Log.d("my tag", "Localizacion agregada");
+        Log.d("my tag", "");
+    }
+
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 1000) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                locationStart();
+                return;
+            }
+        }
+    }
+
+    public void setLocation() {
+        //Obtener la direccion de la calle a partir de la latitud y la longitud
+        if (mCurrentLocation.getLatitude() != 0.0 && mCurrentLocation.getLongitude() != 0.0) {
+            try {
+                Geocoder geocoder = new Geocoder(c, Locale.getDefault());
+                List<Address> list = geocoder.getFromLocation(
+                        mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
+                if (!list.isEmpty()) {
+                    Address DirCalle = list.get(0);
+                    /*mensaje2.setText("Mi direccion es: \n"
+                            + DirCalle.getAddressLine(0));*/
+                    Log.d("my tag", "Mi direccion es: \n"
+                            + DirCalle.getAddressLine(0));
+                    agregarMarcador(DirCalle.getAddressLine(0));
+                    SharedPreferences sp = c.getSharedPreferences("perfil", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.putString("latitude", String.valueOf(mCurrentLocation.getLatitude()));
+                    editor.putString("longitude", String.valueOf(mCurrentLocation.getLongitude()));
+                    editor.putString("address", String.valueOf(DirCalle.getAddressLine(0)));
+                    editor.commit();
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    /* Aqui empieza la Clase Localizacion */
+    public class Localizacion implements LocationListener {
+       /* MainActivity mainActivity;
+
+        public MainActivity getMainActivity() {
+            return mainActivity;
+        }
+
+        public void setMainActivity(Context mainActivity) {
+            this. mainActivity = mainActivity;
+        }*/
+
+        @Override
+        public void onLocationChanged(Location loc) {
+            // Este metodo se ejecuta cada vez que el GPS recibe nuevas coordenadas
+            // debido a la deteccion de un cambio de ubicacion
+
+            loc.getLatitude();
+            loc.getLongitude();
+            mCurrentLocation = loc;
+            String Text = "Mi ubicacion actual es: " + "\n Lat = "
+                    + mCurrentLocation.getLatitude() + "\n Long = " + mCurrentLocation.getLongitude();
+          //  mensaje1.setText(Text);
+            Log.d("my tag", Text);
+            mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
+            mLastUpdateDate = DateFormat.getDateInstance().format(new Date());
+            setLocation();
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+            // Este metodo se ejecuta cuando el GPS es desactivado
+            //mensaje1.setText("GPS Desactivado");
+            Log.d("my tag", "GPS Desactivado");
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+            // Este metodo se ejecuta cuando el GPS es activado
+            //mensaje1.setText("GPS Activado");
+            Log.d("my tag", "GPS Activado");
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+            switch (status) {
+                case LocationProvider.AVAILABLE:
+                    Log.d("debug", "LocationProvider.AVAILABLE");
+                    break;
+                case LocationProvider.OUT_OF_SERVICE:
+                    Log.d("debug", "LocationProvider.OUT_OF_SERVICE");
+                    break;
+                case LocationProvider.TEMPORARILY_UNAVAILABLE:
+                    Log.d("debug", "LocationProvider.TEMPORARILY_UNAVAILABLE");
+                    break;
+            }
+        }
     }
 
     @Override

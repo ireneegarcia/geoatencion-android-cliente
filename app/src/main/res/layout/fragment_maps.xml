@@ -15,9 +15,10 @@
         android:id="@+id/request"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
+        android:layout_gravity="bottom|left"
         android:layout_margin="@dimen/fab_margin"
         android:visibility="visible"
         app:backgroundTint="@color/colorBackground"
+        app:elevation="0dp"
         app:srcCompat="@drawable/ic_megaphone" />
 </FrameLayout>
