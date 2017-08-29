@@ -44,6 +44,7 @@ import java.util.Locale;
 
 import Model.CategoriaAdapterListView;
 import Model.CategoriaServicios;
+import Model.Solicitudes;
 import Remote.APIService;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -61,6 +62,7 @@ public class MapsFragment extends Fragment {
     ListView categorias;
 
     List<CategoriaServicios> categoriaServicio;
+    List<Solicitudes> solicitudes;
     MapView mMapView;
     private GoogleMap googleMap;
 
@@ -335,24 +337,45 @@ public class MapsFragment extends Fragment {
 
     public void listarCategorias(){
 
-        Log.d("myTag", "--->oki ");
-        APIService.Factory.getIntance().list().enqueue(new Callback<List<CategoriaServicios>>() {
+       // Log.d("myTag", "API Solicitudes");
+        APIService.Factory.getIntance().listSolicituds().enqueue(new Callback<List<Solicitudes>>() {
+            @Override
+            public void onResponse(Call<List<Solicitudes>> call, Response<List<Solicitudes>> response) {
+                //Log.d("myTag", "--->bien " + call.request().url());
+
+                if(response.isSuccessful()) {
+                    solicitudes = response.body();
+                   // Log.d("myTag", "--->on reponse " + response.body().toString());
+                    //Log.d("myTag", "--->on reponse " + call.request().url());
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Solicitudes>> call, Throwable t) {
+               // Log.d("myTag", "This is my message on failure " + call.request().url());
+                //Log.d("myTag", "This is my message on failure " + t.toString());
+            }
+        });
+
+      //  Log.d("myTag", "API Categorías");
+        APIService.Factory.getIntance().listCategories().enqueue(new Callback<List<CategoriaServicios>>() {
             @Override
             public void onResponse(Call<List<CategoriaServicios>> call, Response<List<CategoriaServicios>> response) {
-                Log.d("myTag", "--->bien " + call.request().url());
+               // Log.d("myTag", "--->bien " + call.request().url());
 
                 if(response.isSuccessful()) {
                     categoriaServicio = response.body();
-                    Log.d("myTag", "--->on reponse " + response.body().toString());
-                    Log.d("myTag", "--->on reponse " + call.request().url());
+                    //Log.d("myTag", "--->on reponse " + response.body().toString());
+                    //Log.d("myTag", "--->on reponse " + call.request().url());
 
                 }
             }
 
             @Override
             public void onFailure(Call<List<CategoriaServicios>> call, Throwable t) {
-                Log.d("myTag", "This is my message on failure " + call.request().url());
-                Log.d("myTag", "This is my message on failure " + t.toString());
+               // Log.d("myTag", "This is my message on failure " + call.request().url());
+               // Log.d("myTag", "This is my message on failure " + t.toString());
             }
         });
     }
@@ -362,10 +385,14 @@ public class MapsFragment extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = (LayoutInflater)c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
+        //id del usuario logueado
+        SharedPreferences settings = getActivity().getSharedPreferences("perfil", c.MODE_PRIVATE);
+        String mId = settings.getString("id", null);
+
         View layout = inflater.inflate(R.layout.layout_request, null);
         builder.setView(layout);
         categorias = (ListView) layout.findViewById(R.id.listViewCategorias);
-        CategoriaAdapterListView adapter = new CategoriaAdapterListView(c,categoriaServicio);
+        CategoriaAdapterListView adapter = new CategoriaAdapterListView(c, mId, categoriaServicio, solicitudes);
         categorias.setAdapter(adapter);
         /*TextView mTitle = (TextView) layout.findViewById(R.id.textViewTitle);
         TextView mAlert = (TextView) layout.findViewById(R.id.textViewAlert);

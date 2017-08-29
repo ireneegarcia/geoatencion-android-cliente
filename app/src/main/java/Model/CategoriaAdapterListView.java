@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.irene.geoatencion.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,13 +22,38 @@ import java.util.List;
 public class CategoriaAdapterListView extends BaseAdapter {
     private Context context;
     private List<CategoriaServicios> items;
+    private List<CategoriaServicios> resultado;
+    int pos = 0;
 
-    public CategoriaAdapterListView(Context context, List<CategoriaServicios> items) {
+    public CategoriaAdapterListView(Context context, String mId, List<CategoriaServicios> categorias, List<Solicitudes> solicitudes) {
         //super(context, 0, items);
         this.context = context;
-        this.items = items;
+
+        //Resultado
+        this.items = filtrado(mId, categorias, solicitudes);
+       // Log.d("my tag", " "+this.items.size());
     }
 
+    public ArrayList<CategoriaServicios> filtrado(String mId, List<CategoriaServicios> categorias, List<Solicitudes> solicitudes){
+        ArrayList<CategoriaServicios> resultado = new ArrayList<CategoriaServicios>();
+
+        //Se filtran de todas las categorías cuales puede consumir el usuario logueado
+        for (int i = 0; i< solicitudes.size(); i++){
+            //Solicitudes del usuario y que esten aceptadas = afiliaciones
+            if(solicitudes.get(i).getUser().getId().equals(mId) && solicitudes.get(i).getStatus().equals("aceptado")){
+                //Log.d("my tag", solicitudes.get(i).toString());
+                for (int j = 0; j < categorias.size(); j++){
+                    if(solicitudes.get(i).getCategory().equals(categorias.get(j).getId())){
+                        //Log.d("my tag", ""+categorias.get(j));
+                        resultado.add(categorias.get(j));
+                    }
+                }
+
+            }
+        }
+        Log.d("my tag", "resultado "+resultado);
+        return resultado;
+    }
     @Override
     public int getCount() {
         return this.items.size();
@@ -61,7 +87,7 @@ public class CategoriaAdapterListView extends BaseAdapter {
             view = new Fila();
             convertView = inflator.inflate(R.layout.layout_list_categoria_servicio, null);
             view.icon = (ImageView) convertView.findViewById(R.id.imageViewIcon);
-            Log.d("mytag icon", Variables.getUrl()+item.getIconUrl() + " - " + position);
+          //  Log.d("mytag icon", Variables.getUrl()+item.getIconUrl() + " - " + position);
             Glide
                     .with(this.context)
                     .load(Variables.getUrl()+item.getIconUrl())
@@ -75,7 +101,7 @@ public class CategoriaAdapterListView extends BaseAdapter {
         } else {
             view = (Fila) convertView.getTag();
             view.icon = (ImageView) convertView.findViewById(R.id.imageViewIcon);
-            Log.d("mytag icon", Variables.getUrl()+item.getIconUrl() + " - " + position);
+           // Log.d("mytag icon", Variables.getUrl()+item.getIconUrl() + " - " + position);
             Glide
                     .with(this.context)
                     .load(Variables.getUrl()+item.getIconUrl())

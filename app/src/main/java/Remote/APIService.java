@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import Model.CategoriaServicios;
+import Model.Solicitudes;
 import Model.Users;
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -30,8 +31,10 @@ public interface APIService {
                        @Field("password") String password);
 
     @GET("api/categoriaservicios")
-    //@FormUrlEncoded
-    Call<List<CategoriaServicios>> list();
+    Call<List<CategoriaServicios>> listCategories();
+
+    @GET("api/solicituds")
+    Call<List<Solicitudes>> listSolicituds();
 
 
     class Factory {
