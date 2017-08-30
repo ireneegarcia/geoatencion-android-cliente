@@ -98,11 +98,10 @@ public class MainActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment, fragment)
                     .commit();
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_history) {
 
 
-
-        } else if (id == R.id.nav_slideshow) {
+        //} else if (id == R.id.nav_slideshow) {
 
         }else if (id == R.id.nav_map) {
             Fragment fragment = new MapsFragment();

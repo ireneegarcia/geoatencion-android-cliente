@@ -12,13 +12,9 @@
             android:icon="@drawable/user"
             android:title="Mi perfil" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_history"
             android:icon="@drawable/orderhistory"
             android:title="Historial" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/networking"
-            android:title="Afiliaciones" />
        <!-- <item
             android:id="@+id/nav_log_out"
             android:icon="@drawable/ic_menu_manage"

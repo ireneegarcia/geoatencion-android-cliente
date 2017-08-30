@@ -22,8 +22,6 @@ import java.util.List;
 public class CategoriaAdapterListView extends BaseAdapter {
     private Context context;
     private List<CategoriaServicios> items;
-    private List<CategoriaServicios> resultado;
-    int pos = 0;
 
     public CategoriaAdapterListView(Context context, String mId, List<CategoriaServicios> categorias, List<Solicitudes> solicitudes) {
         //super(context, 0, items);
@@ -115,4 +113,6 @@ public class CategoriaAdapterListView extends BaseAdapter {
 
         return convertView;
     }
+
+
 }
