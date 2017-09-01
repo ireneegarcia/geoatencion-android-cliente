@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import Model.Alarma;
 import Model.CategoriaServicios;
 import Model.Solicitudes;
 import Model.Users;
@@ -29,6 +30,15 @@ public interface APIService {
     @FormUrlEncoded
     Call<Users> login(@Field("usernameOrEmail") String username,
                        @Field("password") String password);
+
+    @POST("api/alarms")
+    @FormUrlEncoded
+    Call<Alarma> createAlarm(@Field("categoryService") String categoryService,
+                        @Field("status") String status,
+                        @Field("latitude") String latitude,
+                        @Field("longitude") String longitude,
+                        @Field("address") String address,
+                        @Field("user") String user);
 
     @GET("api/categoriaservicios")
     Call<List<CategoriaServicios>> listCategories();
@@ -62,15 +72,4 @@ public interface APIService {
 
     }
 
-   /* Call<Users> mlogin(@Field("_id") String id,
-                         @Field("displayName") String displayName,
-                         @Field("username") String username,
-                         @Field("ci") String ci,
-                         @Field("roles") String roles,
-                         @Field("profileImageURL") String profileImageURL,
-                         @Field("phone") String phone,
-                         @Field("country") String country,
-                         @Field("email") String email,
-                         @Field("lastName") String lastName,
-                         @Field("firstName") String firstName);*/
 }

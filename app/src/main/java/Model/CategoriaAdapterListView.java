@@ -15,6 +15,14 @@ import com.example.irene.geoatencion.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import Remote.APIService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.example.irene.geoatencion.MapsFragment.address;
+import static com.example.irene.geoatencion.MapsFragment.mCurrentLocation;
+
 /**
  * Created by Irene on 26/8/2017.
  */
@@ -22,14 +30,16 @@ import java.util.List;
 public class CategoriaAdapterListView extends BaseAdapter {
     private Context context;
     private List<CategoriaServicios> items;
+    private String mId;
 
     public CategoriaAdapterListView(Context context, String mId, List<CategoriaServicios> categorias, List<Solicitudes> solicitudes) {
         //super(context, 0, items);
         this.context = context;
+        this.mId = mId;
 
         //Resultado
         this.items = filtrado(mId, categorias, solicitudes);
-       // Log.d("my tag", " "+this.items.size());
+        // Log.d("my tag", " "+this.items.size());
     }
 
     public ArrayList<CategoriaServicios> filtrado(String mId, List<CategoriaServicios> categorias, List<Solicitudes> solicitudes){
@@ -58,19 +68,46 @@ public class CategoriaAdapterListView extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
+    public CategoriaServicios getItem(int position) {
         return this.items.get(position);
     }
 
     @Override
     public long getItemId(int position) {
+
+        APIService.Factory.getIntance()
+                .createAlarm(getItem(position).getId(),
+                        "esperando",
+                        mCurrentLocation.getLatitude()+"",
+                        mCurrentLocation.getLongitude()+"",
+                        address,
+                        mId)
+
+                .enqueue(new Callback<Alarma>() {
+                    @Override
+                    public void onResponse(Call<Alarma> call, Response<Alarma> response) {
+
+                        //code == 200
+                        if(response.isSuccessful()) {
+                            Log.d("my tag", "onResponse: todo fino");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Alarma> call, Throwable t){
+                        //
+                        Log.d("myTag", "This is my message on failure " + call.request().url());
+                    }
+                });
         return position;
     }
+
 
     public static class Fila
     {
         TextView name;
         ImageView icon;
+        String id;
     }
 
     @Override
@@ -85,7 +122,7 @@ public class CategoriaAdapterListView extends BaseAdapter {
             view = new Fila();
             convertView = inflator.inflate(R.layout.layout_list_categoria_servicio, null);
             view.icon = (ImageView) convertView.findViewById(R.id.imageViewIcon);
-          //  Log.d("mytag icon", Variables.getUrl()+item.getIconUrl() + " - " + position);
+            //  Log.d("mytag icon", Variables.getUrl()+item.getIconUrl() + " - " + position);
             Glide
                     .with(this.context)
                     .load(Variables.getUrl()+item.getIconUrl())
@@ -94,12 +131,13 @@ public class CategoriaAdapterListView extends BaseAdapter {
             // view.icon. (item.getIconUrl());
             view.name = (TextView) convertView.findViewById(R.id.textViewName);
             view.name.setText(item.getCategory());
+            view.id = mId;
             convertView.setTag(view);
 
         } else {
             view = (Fila) convertView.getTag();
             view.icon = (ImageView) convertView.findViewById(R.id.imageViewIcon);
-           // Log.d("mytag icon", Variables.getUrl()+item.getIconUrl() + " - " + position);
+            // Log.d("mytag icon", Variables.getUrl()+item.getIconUrl() + " - " + position);
             Glide
                     .with(this.context)
                     .load(Variables.getUrl()+item.getIconUrl())
@@ -107,6 +145,7 @@ public class CategoriaAdapterListView extends BaseAdapter {
                     .into(view.icon);
             view.name = (TextView) convertView.findViewById(R.id.textViewName);
             view.name.setText(item.getCategory());
+            view.id = mId;
         }
 
         //Setear la imagen desde el recurso drawable

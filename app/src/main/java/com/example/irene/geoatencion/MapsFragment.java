@@ -67,7 +67,10 @@ public class MapsFragment extends Fragment {
     private GoogleMap googleMap;
 
     //Coordenadas de ubicación
-    private Location mCurrentLocation;
+    public static Location mCurrentLocation;
+
+    //dirección de la ubicación
+    public static String address;
 
     //Ultima vez en actualizar las coordenadas de ubicación
     //Hora
@@ -238,6 +241,7 @@ public class MapsFragment extends Fragment {
                             + DirCalle.getAddressLine(0));*/
                     Log.d("my tag", "Mi direccion es: \n"
                             + DirCalle.getAddressLine(0));
+                    address = DirCalle.getAddressLine(0);
                     agregarMarcador(DirCalle.getAddressLine(0));
                     SharedPreferences sp = c.getSharedPreferences("perfil", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sp.edit();
