@@ -100,15 +100,19 @@ public class MainActivity extends AppCompatActivity
                     .commit();
         } else if (id == R.id.nav_history) {
 
-
-        //} else if (id == R.id.nav_slideshow) {
-
         }else if (id == R.id.nav_map) {
             Fragment fragment = new MapsFragment();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment, fragment)
                     .commit();
-        } /*else if (id == R.id.nav_log_out) {
+
+        } else if (id == R.id.nav_alarm) {
+            Fragment fragment = new AlarmFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment, fragment)
+                    .commit();
+        }
+        /*else if (id == R.id.nav_log_out) {
             Intent intent = new Intent (this, LoginActivity.class);
             startActivityForResult(intent, 0);
             finish();

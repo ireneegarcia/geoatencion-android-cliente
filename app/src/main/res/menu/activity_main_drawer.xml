@@ -8,6 +8,10 @@
             android:icon="@drawable/pin"
             android:title="Mapa" />
         <item
+            android:id="@+id/nav_alarm"
+            android:icon="@drawable/megaphone"
+            android:title="Status de alarma" />
+        <item
             android:id="@+id/nav_profile"
             android:icon="@drawable/user"
             android:title="Mi perfil" />

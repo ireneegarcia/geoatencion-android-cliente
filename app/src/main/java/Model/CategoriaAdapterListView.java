@@ -15,14 +15,6 @@ import com.example.irene.geoatencion.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import Remote.APIService;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-import static com.example.irene.geoatencion.MapsFragment.address;
-import static com.example.irene.geoatencion.MapsFragment.mCurrentLocation;
-
 /**
  * Created by Irene on 26/8/2017.
  */
@@ -74,31 +66,6 @@ public class CategoriaAdapterListView extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-
-        APIService.Factory.getIntance()
-                .createAlarm(getItem(position).getId(),
-                        "esperando",
-                        mCurrentLocation.getLatitude()+"",
-                        mCurrentLocation.getLongitude()+"",
-                        address,
-                        mId)
-
-                .enqueue(new Callback<Alarma>() {
-                    @Override
-                    public void onResponse(Call<Alarma> call, Response<Alarma> response) {
-
-                        //code == 200
-                        if(response.isSuccessful()) {
-                            Log.d("my tag", "onResponse: todo fino");
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Alarma> call, Throwable t){
-                        //
-                        Log.d("myTag", "This is my message on failure " + call.request().url());
-                    }
-                });
         return position;
     }
 

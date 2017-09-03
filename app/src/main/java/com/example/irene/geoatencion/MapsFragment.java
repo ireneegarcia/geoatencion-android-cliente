@@ -23,7 +23,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -42,6 +47,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import Model.Alarma;
 import Model.CategoriaAdapterListView;
 import Model.CategoriaServicios;
 import Model.Solicitudes;
@@ -391,28 +397,64 @@ public class MapsFragment extends Fragment {
 
         //id del usuario logueado
         SharedPreferences settings = getActivity().getSharedPreferences("perfil", c.MODE_PRIVATE);
-        String mId = settings.getString("id", null);
+        final String mId = settings.getString("id", null);
 
         View layout = inflater.inflate(R.layout.layout_request, null);
         builder.setView(layout);
         categorias = (ListView) layout.findViewById(R.id.listViewCategorias);
+        final RelativeLayout message = layout.findViewById(R.id.message);
         CategoriaAdapterListView adapter = new CategoriaAdapterListView(c, mId, categoriaServicio, solicitudes);
         categorias.setAdapter(adapter);
-        /*TextView mTitle = (TextView) layout.findViewById(R.id.textViewTitle);
-        TextView mAlert = (TextView) layout.findViewById(R.id.textViewAlert);
-        Button mOk = (Button) layout.findViewById(R.id.buttonOk);
-        mTitle.setText("Estado del pago");
-        mAlert.setText("Pago procesado de manera exitosa");
-        mOk.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        /*Intent intent = new Intent (ConfirmPaymentActivity.this, MainActivity.class);
-                        startActivityForResult(intent, 0);
-                        finish();*
-                    }
-                }
-        );*/
+        final TextView status = (TextView) layout.findViewById(R.id.textViewMessage);
+        final TextView status1 = (TextView) layout.findViewById(R.id.textViewMessage1);
+        final TextView status2 = (TextView) layout.findViewById(R.id.textViewMessage2);
+        final ProgressBar progreso = (ProgressBar) layout.findViewById(R.id.progressBarMessage);
+        final ImageView imageStatusA = (ImageView) layout.findViewById(R.id.imageViewAway);
+        final ImageView imageStatusP = (ImageView) layout.findViewById(R.id.imageViewProcesed);
+        final ImageView imageStatusA1 = (ImageView) layout.findViewById(R.id.imageViewAway1);
+        final ImageView imageStatusP1 = (ImageView) layout.findViewById(R.id.imageViewProcesed1);
+        final ImageView imageStatusA2 = (ImageView) layout.findViewById(R.id.imageViewAway2);
+        final ImageView imageStatusP3 = (ImageView) layout.findViewById(R.id.imageViewProcesed2);
+
+        categorias.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id) {
+                Log.i("posicion", "posicion " + position);
+                categorias.setVisibility(View.GONE);
+                message.setVisibility(View.VISIBLE);
+                status.setText("Enviando alarma");
+                final CategoriaServicios posActual = categoriaServicio.get(position);
+                APIService.Factory.getIntance()
+                        .createAlarm(posActual.getId(),
+                                "esperando",
+                                mCurrentLocation.getLatitude()+"",
+                                mCurrentLocation.getLongitude()+"",
+                                address,
+                                mId)
+
+                        .enqueue(new Callback<Alarma>() {
+                            @Override
+                            public void onResponse(Call<Alarma> call, Response<Alarma> response) {
+
+                                //code == 200
+                                if(response.isSuccessful()) {
+                                    Log.d("my tag", "onResponse: todo fino");
+                                    status.setText("Alarma enviada de manera exitosa");
+                                    imageStatusA.setVisibility(View.GONE);
+                                    imageStatusP.setVisibility(View.VISIBLE);
+                                    progreso.setVisibility(View.GONE);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Alarma> call, Throwable t){
+                                //
+                                Log.d("myTag", "This is my message on failure " + call.request().url());
+                                status.setText("Error al enviar la alarma");
+                            }
+                        });
+            }
+        });
 
         return builder.create();
     }
