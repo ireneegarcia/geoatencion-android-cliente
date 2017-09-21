@@ -56,6 +56,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static Model.CategoriaAdapterListView.resultado;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -423,7 +425,8 @@ public class MapsFragment extends Fragment {
                 categorias.setVisibility(View.GONE);
                 message.setVisibility(View.VISIBLE);
                 status.setText("Enviando alarma");
-                final CategoriaServicios posActual = categoriaServicio.get(position);
+                final CategoriaServicios posActual = resultado.get(position);
+                Log.d("categoria", posActual.getCategory());
                 APIService.Factory.getIntance()
                         .createAlarm(posActual.getId(),
                                 "esperando",

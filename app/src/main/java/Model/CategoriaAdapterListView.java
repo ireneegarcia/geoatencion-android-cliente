@@ -23,6 +23,7 @@ public class CategoriaAdapterListView extends BaseAdapter {
     private Context context;
     private List<CategoriaServicios> items;
     private String mId;
+    public static ArrayList<CategoriaServicios> resultado = new ArrayList<CategoriaServicios>();
 
     public CategoriaAdapterListView(Context context, String mId, List<CategoriaServicios> categorias, List<Solicitudes> solicitudes) {
         //super(context, 0, items);
@@ -35,8 +36,9 @@ public class CategoriaAdapterListView extends BaseAdapter {
     }
 
     public ArrayList<CategoriaServicios> filtrado(String mId, List<CategoriaServicios> categorias, List<Solicitudes> solicitudes){
-        ArrayList<CategoriaServicios> resultado = new ArrayList<CategoriaServicios>();
+        // ArrayList<CategoriaServicios> resultado = new ArrayList<CategoriaServicios>();
 
+        resultado = new ArrayList<CategoriaServicios>();
         //Se filtran de todas las categorías cuales puede consumir el usuario logueado
         for (int i = 0; i< solicitudes.size(); i++){
             //Solicitudes del usuario y que esten aceptadas = afiliaciones
