@@ -69,4 +69,5 @@ dependencies {
     // Firesebase for push notifications
     compile 'com.google.firebase:firebase-core:9.8.0'
     compile 'com.google.firebase:firebase-messaging:9.8.0'
+    apply plugin: 'com.google.gms.google-services'
 }

@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "382738472231",
+    "firebase_url": "https://geoatencion-9cded.firebaseio.com",
+    "project_id": "geoatencion-9cded",
+    "storage_bucket": "geoatencion-9cded.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:382738472231:android:c52d2ec8677fa124",
+        "android_client_info": {
+          "package_name": "com.example.irene.geoatencion"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "382738472231-e5la932fmeglfh11fl3t1p9nrarb6obn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjoWKyMCuu6dgYYDL5nJOVuZNpOG78JH4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
