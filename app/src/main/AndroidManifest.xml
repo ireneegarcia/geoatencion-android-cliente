@@ -53,4 +53,19 @@
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
+    <service
+        android:name=".Services.GeoAtencionFirebaseMessagingService">
+        <intent-filter>
+            <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            <category android:name="android.intent.category.DEFAULT"/>
+        </intent-filter>
+    </service>
+
+    <service
+        android:name=".Services.GeoAtencionFirebaseInstanceIDService">
+        <intent-filter>
+            <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            <category android:name="android.intent.category.DEFAULT"/>
+        </intent-filter>
+    </service>
 </manifest>
