@@ -1,4 +1,4 @@
-package Model;
+package com.example.irene.geoatencion.Model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -7,11 +7,14 @@ import com.google.gson.annotations.SerializedName;
  * Created by Irene on 31/8/2017.
  */
 
-public class Alarma {
+public class Alarmas {
 
+    @SerializedName("_id")
+    @Expose
+    private String _id;
     @SerializedName("user")
     @Expose
-    private String user;
+    private User user;
     @SerializedName("categoryService")
     @Expose
     private String categoryService;
@@ -27,13 +30,51 @@ public class Alarma {
     @SerializedName("address")
     @Expose
     private String address;
+    @SerializedName("created")
+    @Expose
+    private String created;
+    @SerializedName("rating")
+    @Expose
+    private String rating;
+    @SerializedName("organism")
+    @Expose
+    private String organism;
+    @SerializedName("icon")
+    @Expose
+    private String icon;
+    @SerializedName("network")
+    @Expose
+    private String network;
 
+    public String getOrganism() {
+        return organism;
+    }
 
-    public String getUser() {
+    public void setOrganism(String organism) {
+        this.organism = organism;
+    }
+
+    public String get_id() {
+        return _id;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
+    }
+
+    public String getRating() {
+        return rating;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
+    }
+
+    public User getUser() {
         return user;
     }
 
-    public void setUser(String user) {
+    public void setUser(User user) {
         this.user = user;
     }
 
@@ -77,15 +118,45 @@ public class Alarma {
         this.address = address;
     }
 
+    public String getCreated() {
+        return created;
+    }
+
+    public void setCreated(String created) {
+        this.created = created;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public String getNetwork() {
+        return network;
+    }
+
+    public void setNetwork(String network) {
+        this.network = network;
+    }
+
+
     @Override
     public String toString() {
-        return "Alarma{" +
-                "user='" + user + '\'' +
+        return "Alarmas{" +
+                "_id='" + _id + '\'' +
+                ", user=" + user +
                 ", categoryService='" + categoryService + '\'' +
                 ", status='" + status + '\'' +
                 ", latitude='" + latitude + '\'' +
                 ", longitude='" + longitude + '\'' +
                 ", address='" + address + '\'' +
+                ", created='" + created + '\'' +
+                ", rating='" + rating + '\'' +
+                ", organism='" + organism + '\'' +
+                ", icon='" + icon + '\'' +
                 '}';
     }
 }

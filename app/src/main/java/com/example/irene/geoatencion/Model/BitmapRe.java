@@ -1,4 +1,4 @@
-package Model;
+package com.example.irene.geoatencion.Model;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

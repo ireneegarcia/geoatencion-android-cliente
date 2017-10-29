@@ -1,4 +1,4 @@
-package Model;
+package com.example.irene.geoatencion.Model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -30,6 +30,10 @@ public class User {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public User(String id) {
+        this.id = id;
     }
 
     @Override

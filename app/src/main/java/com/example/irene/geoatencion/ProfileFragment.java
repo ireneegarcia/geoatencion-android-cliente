@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import Model.Variables;
+import com.example.irene.geoatencion.Model.Variables;
 
 
 public class ProfileFragment extends Fragment {
@@ -30,10 +30,9 @@ public class ProfileFragment extends Fragment {
         TextView name;
         TextView phone;
         TextView email;
-        TextView address;
-        TextView latitude;
-        TextView longitude;
         ImageView profileImage;
+        TextView address1;
+        TextView address2;
         //ImageView icon;
     }
 
@@ -59,13 +58,15 @@ public class ProfileFragment extends Fragment {
         view.name = (TextView) mView.findViewById(R.id.textView2);
         view.phone = (TextView) mView.findViewById(R.id.textView3);
         view.email = (TextView) mView.findViewById(R.id.textView5);
-        view.address = (TextView) mView.findViewById(R.id.textView4);
+        view.address1 = (TextView) mView.findViewById(R.id.textView4);
+        view.address2 = (TextView) mView.findViewById(R.id.textView15);
         view.profileImage = (ImageView) mView.findViewById(R.id.imageView2);
 
         view.name.setText(mName);
         view.phone.setText(mPhone);
         view.email.setText(mEmail);
-        view.address.setText("\nMi dirección actual: "+mAddress +"\nMi ubicación actual: "+mLatitude+", "+mLongitude);
+        view.address1.setText(mAddress);
+        view.address2.setText(mLatitude+", "+mLongitude);
         Glide
                 .with(this.c)
                 .load(Variables.getUrl()+mProfileImage)

@@ -1,4 +1,4 @@
-package Model;
+package com.example.irene.geoatencion.Model;
 
 import android.content.Context;
 import android.util.Log;
@@ -24,6 +24,7 @@ public class CategoriaAdapterListView extends BaseAdapter {
     private List<CategoriaServicios> items;
     private String mId;
     public static ArrayList<CategoriaServicios> resultado = new ArrayList<CategoriaServicios>();
+    public static ArrayList<String> organismos = new ArrayList<>();
 
     public CategoriaAdapterListView(Context context, String mId, List<CategoriaServicios> categorias, List<Solicitudes> solicitudes) {
         //super(context, 0, items);
@@ -32,7 +33,7 @@ public class CategoriaAdapterListView extends BaseAdapter {
 
         //Resultado
         this.items = filtrado(mId, categorias, solicitudes);
-        // Log.d("my tag", " "+this.items.size());
+        // Logs.d("my tag", " "+this.items.size());
     }
 
     public ArrayList<CategoriaServicios> filtrado(String mId, List<CategoriaServicios> categorias, List<Solicitudes> solicitudes){
@@ -43,11 +44,12 @@ public class CategoriaAdapterListView extends BaseAdapter {
         for (int i = 0; i< solicitudes.size(); i++){
             //Solicitudes del usuario y que esten aceptadas = afiliaciones
             if(solicitudes.get(i).getUser().getId().equals(mId) && solicitudes.get(i).getStatus().equals("aceptado")){
-                //Log.d("my tag", solicitudes.get(i).toString());
+                //Logs.d("my tag", solicitudes.get(i).toString());
                 for (int j = 0; j < categorias.size(); j++){
                     if(solicitudes.get(i).getCategory().equals(categorias.get(j).getId())){
-                        //Log.d("my tag", ""+categorias.get(j));
+                        //Logs.d("my tag", ""+categorias.get(j));
                         resultado.add(categorias.get(j));
+                        organismos.add(solicitudes.get(i).getOrganism());
                     }
                 }
 
@@ -91,7 +93,7 @@ public class CategoriaAdapterListView extends BaseAdapter {
             view = new Fila();
             convertView = inflator.inflate(R.layout.layout_list_categoria_servicio, null);
             view.icon = (ImageView) convertView.findViewById(R.id.imageViewIcon);
-            //  Log.d("mytag icon", Variables.getUrl()+item.getIconUrl() + " - " + position);
+            //  Logs.d("mytag icon", Variables.getUrl()+item.getIconUrl() + " - " + position);
             Glide
                     .with(this.context)
                     .load(Variables.getUrl()+item.getIconUrl())
@@ -106,7 +108,7 @@ public class CategoriaAdapterListView extends BaseAdapter {
         } else {
             view = (Fila) convertView.getTag();
             view.icon = (ImageView) convertView.findViewById(R.id.imageViewIcon);
-            // Log.d("mytag icon", Variables.getUrl()+item.getIconUrl() + " - " + position);
+            // Logs.d("mytag icon", Variables.getUrl()+item.getIconUrl() + " - " + position);
             Glide
                     .with(this.context)
                     .load(Variables.getUrl()+item.getIconUrl())

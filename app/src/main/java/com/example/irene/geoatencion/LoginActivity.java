@@ -31,11 +31,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.irene.geoatencion.Model.Users;
+import com.example.irene.geoatencion.Remote.APIService;
+import com.example.irene.geoatencion.Services.MyFirebaseInstanceIDService;
+import com.google.firebase.iid.FirebaseInstanceId;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import Model.Users;
-import Remote.APIService;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -76,6 +79,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
@@ -104,7 +108,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-
     }
 
     private void populateAutoComplete() {
@@ -314,7 +317,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         APIService.Factory.getIntance().login(usernameOrEmail, password).enqueue(new Callback<Users>() {
             @Override
             public void onResponse(Call<Users> call, Response<Users> response) {
-                //Log.d("myTag", "onresponse " + response.code());
+                //Logs.d("myTag", "onresponse " + response.code());
                 if(response.code() == 422){
                     Intent intent = new Intent (LoginActivity.this, LoginActivity.class);
                     startActivityForResult(intent, 0);
@@ -333,10 +336,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     editor.putString("profileImage", String.valueOf(response.body().getProfileImageURL()));
                     editor.commit();
 
+                    //Se obtiene el token actualizado
+                    String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+                    Log.d("firebaseMapsFragment", "Token actualizado: " + refreshedToken);
+                    MyFirebaseInstanceIDService.registerToken(refreshedToken, String.valueOf(response.body().getId()));
+
+                    Log.d("exito", "--->on reponse " +String.valueOf(response.body().getId()));
+
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
 
-                    //Log.d("myTag", "--->on reponse " + call.request().url());
+
 
                 }
             }
@@ -367,13 +377,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
 
-            try {
+            /*try {
                 // Simulate network access.
 
-                Thread.sleep(2000);
+                //Thread.sleep(2000);
             } catch (InterruptedException e) {
                 return false;
-            }
+            }*/
 
             for (String credential : DUMMY_CREDENTIALS) {
                 String[] pieces = credential.split(":");
