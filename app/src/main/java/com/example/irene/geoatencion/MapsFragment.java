@@ -569,7 +569,8 @@ public class MapsFragment extends Fragment {
 
         // Creación de log
         APIService.Factory.getIntance().createLog(
-                "La solicitud de atención ha sido cancelada por el cliente",
+                "Ha sido cancelada la solicitud de atención " + alarma.get(0).get_id() +
+                        " por el cliente " + alarma.get(0).getUser().getDisplayName(),
                 alarma.get(0).get_id(),
                 alarma.get(0).getUser().getId(),
                 "",
