@@ -52,14 +52,9 @@ public class HistoryFragment extends Fragment {
 
             @Override
             public void onResponse(Call<List<Alarmas>> call, Response<List<Alarmas>> response) {
-                //Logs.d("myTag", "--->bien " + call.request().url());
 
                 if(response.isSuccessful()) {
-
                     filtrado(response.body());
-
-                    //Logs.d("AlarmaFragment", "--->on reponse " + response.body().toString());
-                    //Logs.d("myTag", "--->on reponse " + call.request().url());
                 }
             }
 
@@ -75,36 +70,23 @@ public class HistoryFragment extends Fragment {
 
         alarma = new ArrayList<>();
 
-        //id del usuario logueado
         SharedPreferences settings = getActivity().getSharedPreferences("perfil", c.MODE_PRIVATE);
         final String mId = settings.getString("id", null);
 
         for (int i = 0; i< alarmasResponse.size(); i++){
-            // si la alarma pertenece al usuario
             if(alarmasResponse.get(i).getUser().getId().equals(mId)){
                 alarma.add(alarmasResponse.get(i));
             }
         }
-
-        //Logs.d("AlarmaFragment", "" + alarma.toString());
         adaptarVista();
     }
 
     public void adaptarVista(){
 
         final TextView historial = (TextView) mView.findViewById(R.id.textView4);
-        /*final TextView fecha1 = (TextView) mView.findViewById(R.id.fecha1);
-        final TextView fecha2 = (TextView) mView.findViewById(R.id.fecha2);
-        final TextView fecha3 = (TextView) mView.findViewById(R.id.fecha3);
-        final TextView fecha4 = (TextView) mView.findViewById(R.id.fecha4);
-        final TextView status1 = (TextView) mView.findViewById(R.id.status1);
-        final TextView status2 = (TextView) mView.findViewById(R.id.status2);
-        final TextView status3 = (TextView) mView.findViewById(R.id.status3);
-        final TextView status4 = (TextView) mView.findViewById(R.id.status4);*/
 
         SimpleDateFormat formatI = new SimpleDateFormat("yyy-MM-dd'T'HH:mm:ss", Locale.US);
         SimpleDateFormat formatF = new SimpleDateFormat("yyyy-MM-dd, hh:mm aaa", Locale.US);
-
 
         try {
 
@@ -123,10 +105,5 @@ public class HistoryFragment extends Fragment {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
-
-
-
-
     }
 }

@@ -97,6 +97,7 @@ public class MapsFragment extends Fragment {
     MapView mMapView;
     private static GoogleMap googleMap;
 
+    LocationManager mlocManager;
     //Coordenadas de ubicación
     public static Location mCurrentLocation;
     public static Location mCurrentLocationPush;
@@ -186,7 +187,7 @@ public class MapsFragment extends Fragment {
 
     private void locationStart() {
 
-        LocationManager mlocManager = (LocationManager) c.getSystemService(Context.LOCATION_SERVICE);
+        /*LocationManager*/ mlocManager = (LocationManager) c.getSystemService(Context.LOCATION_SERVICE);
         Localizacion Local = new Localizacion();
         // Local.setMainActivity(c);
         final boolean gpsEnabled = mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -202,8 +203,6 @@ public class MapsFragment extends Fragment {
         mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, (LocationListener) Local);
         mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, (LocationListener) Local);
 
-        // mensaje1.setText("Localizacion agregada");
-        // mensaje2.setText("");
         Log.d("my tag", "Localizacion agregada");
         Log.d("my tag", "");
     }
@@ -253,28 +252,35 @@ public class MapsFragment extends Fragment {
             // Este metodo se ejecuta cada vez que el GPS recibe nuevas coordenadas
             // debido a la deteccion de un cambio de ubicacion
 
-            if (!notificacion.equals("")) {
-                AlertDialog alert = createSimpleDialog(notificacion);
-                alert.show();
-                notificacion = "";
+            SharedPreferences settings = c.getSharedPreferences("perfil", Context.MODE_PRIVATE);
+            if (settings.getString("id", null) == null) {
+                mlocManager.removeUpdates(this);
+                mlocManager = null;
+            } else {
+
+                if (!notificacion.equals("")) {
+                    AlertDialog alert = createSimpleDialog(notificacion);
+                    alert.show();
+                    notificacion = "";
+                }
+                if (!notificacionUbicacion.equals("esperando") && !notificacionUbicacion.equals("en atencion")) {
+
+                }
+                googleMap.clear();
+
+                obtenerAlarmas();
+
+                loc.getLatitude();
+                loc.getLongitude();
+                mCurrentLocation = loc;
+                String Text = "Mi ubicacion actual es: " + "\n Lat = "
+                        + mCurrentLocation.getLatitude() + "\n Long = " + mCurrentLocation.getLongitude();
+                //  mensaje1.setText(Text);
+                Log.d("my tag", Text);
+                mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
+                mLastUpdateDate = DateFormat.getDateInstance().format(new Date());
+                setLocation();
             }
-            if (!notificacionUbicacion.equals("esperando") && !notificacionUbicacion.equals("en atencion")) {
-
-            }
-            googleMap.clear();
-
-            obtenerAlarmas();
-
-            loc.getLatitude();
-            loc.getLongitude();
-            mCurrentLocation = loc;
-            String Text = "Mi ubicacion actual es: " + "\n Lat = "
-                    + mCurrentLocation.getLatitude() + "\n Long = " + mCurrentLocation.getLongitude();
-            //  mensaje1.setText(Text);
-            Log.d("my tag", Text);
-            mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
-            mLastUpdateDate = DateFormat.getDateInstance().format(new Date());
-            setLocation();
         }
 
         @Override
@@ -333,45 +339,31 @@ public class MapsFragment extends Fragment {
 
     public void listarCategorias(){
 
-        // Log.d("myTag", "API Solicitudes");
         APIService.Factory.getIntance().listSolicituds().enqueue(new Callback<List<Solicitudes>>() {
             @Override
             public void onResponse(Call<List<Solicitudes>> call, Response<List<Solicitudes>> response) {
-                //Log.d("myTag", "--->bien " + call.request().url());
 
                 if(response.isSuccessful()) {
                     solicitudes = response.body();
-                    // Log.d("myTag", "--->on reponse " + response.body().toString());
-                    //Log.d("myTag", "--->on reponse " + call.request().url());
-
                 }
             }
 
             @Override
             public void onFailure(Call<List<Solicitudes>> call, Throwable t) {
-                // Log.d("myTag", "This is my message on failure " + call.request().url());
-                //Log.d("myTag", "This is my message on failure " + t.toString());
             }
         });
 
-        //  Log.d("myTag", "API Categorías");
         APIService.Factory.getIntance().listCategories().enqueue(new Callback<List<CategoriaServicios>>() {
             @Override
             public void onResponse(Call<List<CategoriaServicios>> call, Response<List<CategoriaServicios>> response) {
-                // Log.d("myTag", "--->bien " + call.request().url());
 
                 if(response.isSuccessful()) {
                     categoriaServicio = response.body();
-                    //Log.d("myTag", "--->on reponse " + response.body().toString());
-                    //Log.d("myTag", "--->on reponse " + call.request().url());
-
                 }
             }
 
             @Override
             public void onFailure(Call<List<CategoriaServicios>> call, Throwable t) {
-                // Log.d("myTag", "This is my message on failure " + call.request().url());
-                // Log.d("myTag", "This is my message on failure " + t.toString());
             }
         });
     }
@@ -386,7 +378,6 @@ public class MapsFragment extends Fragment {
 
             @Override
             public void onResponse(Call<List<Alarmas>> call, Response<List<Alarmas>> response) {
-                //Log.d("myTag", "--->bien " + call.request().url());
 
                 if(response.isSuccessful()) {
 
@@ -404,9 +395,6 @@ public class MapsFragment extends Fragment {
                         Log.d("tamano alarma", "onResponse: "+alarma.size());
                         obtenerUnidad();
                     }
-
-                    //Log.d("AlarmaFragment", "--->on reponse " + response.body().toString());
-                    //Log.d("myTag", "--->on reponse " + call.request().url());
                 }
             }
 
