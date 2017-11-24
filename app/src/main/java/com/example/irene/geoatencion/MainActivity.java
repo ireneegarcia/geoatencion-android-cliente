@@ -51,15 +51,6 @@ public class MainActivity extends AppCompatActivity
         }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -68,12 +59,6 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        /*Fragment fragment = new MapsFragment();
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment, fragment)
-                .commit();*/
-
-
     }
 
     @Override
@@ -100,8 +85,10 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+        //Cerrar sesión
         if (id == R.id.action_settings) {
+            SharedPreferences settings = getSharedPreferences("perfil", MODE_PRIVATE);
+            settings.edit().clear().commit();
             Intent intent = new Intent (this, LoginActivity.class);
             startActivityForResult(intent, 0);
             finish();

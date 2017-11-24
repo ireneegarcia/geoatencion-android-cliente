@@ -40,11 +40,12 @@ public class CategoriaAdapterListView extends BaseAdapter {
         // ArrayList<CategoriaServicios> resultado = new ArrayList<CategoriaServicios>();
 
         resultado = new ArrayList<CategoriaServicios>();
+        //Log.d("solicitudes", solicitudes.size()+"");
         //Se filtran de todas las categorías cuales puede consumir el usuario logueado
         for (int i = 0; i< solicitudes.size(); i++){
             //Solicitudes del usuario y que esten aceptadas = afiliaciones
             if(solicitudes.get(i).getUser().getId().equals(mId) && solicitudes.get(i).getStatus().equals("aceptado")){
-                //Logs.d("my tag", solicitudes.get(i).toString());
+                //Log.d("solicitudes", solicitudes.get(i).toString());
                 for (int j = 0; j < categorias.size(); j++){
                     if(solicitudes.get(i).getCategory().equals(categorias.get(j).getId())){
                         //Logs.d("my tag", ""+categorias.get(j));

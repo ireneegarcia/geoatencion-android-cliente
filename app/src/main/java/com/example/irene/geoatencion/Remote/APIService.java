@@ -30,7 +30,7 @@ import retrofit2.http.Path;
 public interface APIService {
 
     String BASE_URL = "http://192.168.0.150:3000/";
-    //String BASE_URL = "http://10.0.0.41:3000/";
+    //String BASE_URL = "http://10.0.0.19:3000/";
 
 
     //@Headers("Content-Type: application/json")

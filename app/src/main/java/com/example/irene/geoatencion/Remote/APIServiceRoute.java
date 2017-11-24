@@ -18,8 +18,8 @@ import retrofit2.http.Query;
  */
 
 public interface APIServiceRoute {
-    String BASE_URL = "http://maps.googleapis.com/";
-    //String BASE_URL = "http://10.0.0.41:3000/";
+     String BASE_URL = "http://maps.googleapis.com/";
+    //String BASE_URL = "http://10.0.0.19:3000/";
 
     @GET("maps/api/directions/json")
     Call<RouteGet> getRoute(@Query("origin") String origin,

@@ -82,16 +82,14 @@ public class AlarmFragment extends Fragment {
                         }
                     }
 
-                    if(alarma.get(0).getStatus().equals("en atencion")) {
-                        obtenerNetwork(alarma.get(0));
-                    }else{
-                        statusAtencion();
+                    if (alarma.size() != 0) {
+                        if(alarma.get(0).getStatus().equals("en atencion")) {
+                            obtenerNetwork(alarma.get(0));
+                        }else{
+                            statusAtencion();
+                        }
                     }
 
-                    //filtrado(response.body());
-
-                    //Logs.d("AlarmaFragment", "--->on reponse " + response.body().toString());
-                    //Logs.d("myTag", "--->on reponse " + call.request().url());
                 }
             }
 

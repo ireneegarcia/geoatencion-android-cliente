@@ -173,7 +173,11 @@ public class MapsFragment extends Fragment {
 
             }
         });
+
+
         obtenerAlarmas();
+
+
         return mView;
 
     }
@@ -181,6 +185,7 @@ public class MapsFragment extends Fragment {
 
 
     private void locationStart() {
+
         LocationManager mlocManager = (LocationManager) c.getSystemService(Context.LOCATION_SERVICE);
         Localizacion Local = new Localizacion();
         // Local.setMainActivity(c);
@@ -193,6 +198,7 @@ public class MapsFragment extends Fragment {
             ActivityCompat.requestPermissions((Activity) c, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
             return;
         }
+
         mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, (LocationListener) Local);
         mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, (LocationListener) Local);
 
