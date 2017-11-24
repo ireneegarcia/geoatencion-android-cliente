@@ -92,76 +92,31 @@ public class HistoryFragment extends Fragment {
 
     public void adaptarVista(){
 
-        final TextView fecha1 = (TextView) mView.findViewById(R.id.fecha1);
+        final TextView historial = (TextView) mView.findViewById(R.id.textView4);
+        /*final TextView fecha1 = (TextView) mView.findViewById(R.id.fecha1);
         final TextView fecha2 = (TextView) mView.findViewById(R.id.fecha2);
         final TextView fecha3 = (TextView) mView.findViewById(R.id.fecha3);
         final TextView fecha4 = (TextView) mView.findViewById(R.id.fecha4);
         final TextView status1 = (TextView) mView.findViewById(R.id.status1);
         final TextView status2 = (TextView) mView.findViewById(R.id.status2);
         final TextView status3 = (TextView) mView.findViewById(R.id.status3);
-        final TextView status4 = (TextView) mView.findViewById(R.id.status4);
+        final TextView status4 = (TextView) mView.findViewById(R.id.status4);*/
 
         SimpleDateFormat formatI = new SimpleDateFormat("yyy-MM-dd'T'HH:mm:ss", Locale.US);
         SimpleDateFormat formatF = new SimpleDateFormat("yyyy-MM-dd, hh:mm aaa", Locale.US);
 
 
         try {
-            switch (alarma.size()){
-                case 1:{
-                    fecha1.setText(formatF.format(formatI.parse(alarma.get(0).getCreated().substring(0,18))));
-                    status1.setText(alarma.get(0).getStatus());
 
-                    fecha1.setText(formatF.format(formatI.parse(alarma.get(0).getCreated().substring(0,18))));
-                    status1.setText(alarma.get(0).getStatus());
+            for (int i = 0; i< alarma.size(); i++){
 
-                    fecha2.setVisibility(View.GONE);
-                    status2.setVisibility(View.GONE);
-
-                    fecha3.setVisibility(View.GONE);
-                    status3.setVisibility(View.GONE);
-
-                    fecha4.setVisibility(View.GONE);
-                    status4.setVisibility(View.GONE);
-                    break;
-                }case 2:{
-                    fecha1.setText(formatF.format(formatI.parse(alarma.get(0).getCreated().substring(0,18))));
-                    status1.setText(alarma.get(0).getStatus());
-
-                    fecha2.setText(formatF.format(formatI.parse(alarma.get(1).getCreated().substring(0,18))));
-                    status2.setText(alarma.get(1).getStatus());
-
-                    fecha3.setVisibility(View.GONE);
-                    status3.setVisibility(View.GONE);
-
-                    fecha4.setVisibility(View.GONE);
-                    status4.setVisibility(View.GONE);
-                    break;
-                }case 3:{
-                    fecha1.setText(formatF.format(formatI.parse(alarma.get(0).getCreated().substring(0,18))));
-                    status1.setText(alarma.get(0).getStatus());
-
-                    fecha2.setText(formatF.format(formatI.parse(alarma.get(1).getCreated().substring(0,18))));
-                    status2.setText(alarma.get(1).getStatus());
-
-                    fecha3.setText(formatF.format(formatI.parse(alarma.get(2).getCreated().substring(0,18))));
-                    status3.setText(alarma.get(2).getStatus());
-
-                    fecha4.setVisibility(View.GONE);
-                    status4.setVisibility(View.GONE);
-                    break;
-                }case 4:{
-                    fecha1.setText(formatF.format(formatI.parse(alarma.get(0).getCreated().substring(0,18))));
-                    status1.setText(alarma.get(0).getStatus());
-
-                    fecha2.setText(formatF.format(formatI.parse(alarma.get(1).getCreated().substring(0,18))));
-                    status2.setText(alarma.get(1).getStatus());
-
-                    fecha3.setText(formatF.format(formatI.parse(alarma.get(2).getCreated().substring(0,18))));
-                    status3.setText(alarma.get(2).getStatus());
-
-                    fecha4.setText(formatF.format(formatI.parse(alarma.get(3).getCreated().substring(0,18))));
-                    status4.setText(alarma.get(3).getStatus());
-                    break;
+                Log.d("history", ""+ alarma.get(0).getStatus());
+                if(i == 0){
+                    historial.setText("\n- "+formatF.format(formatI.parse(alarma.get(0).getCreated().substring(0,18))));
+                    historial.setText(historial.getText() + ": " + alarma.get(0).getStatus());
+                } else {
+                    historial.setText(historial.getText() + "\n\n- "+formatF.format(formatI.parse(alarma.get(i).getCreated().substring(0,18))));
+                    historial.setText(historial.getText() + ": " + alarma.get(i).getStatus());
                 }
             }
 

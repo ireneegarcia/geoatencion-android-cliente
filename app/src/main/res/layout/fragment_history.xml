@@ -9,60 +9,102 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="15dp">
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="10dp"
+            android:background="?attr/actionModeSplitBackground"
+            android:src="@android:drawable/ic_menu_mylocation" />
 
         <TextView
-            android:id="@+id/textView16"
+            android:id="@+id/textView7"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentStart="true"
-            android:paddingTop="10dp"
+            android:layout_alignBottom="@+id/imageView3"
+            android:layout_alignTop="@+id/imageView3"
+            android:layout_toEndOf="@+id/imageView3"
+            android:layout_toRightOf="@+id/imageView3"
+            android:background="@android:color/holo_blue_dark"
+            android:elevation="0dp"
+            android:fontFamily="sans-serif"
+            android:gravity="center_vertical"
+            android:paddingLeft="20dp"
             android:text="Mi historial de solicitudes"
-            android:textAlignment="center"
-            android:textSize="24sp" />
+            android:textColor="@color/common_google_signin_btn_text_dark_default"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
-        <TableLayout
+        <TextView
+            android:id="@+id/textView4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/textView16"
-            android:layout_marginTop="37dp">
+            android:layout_below="@+id/imageView3"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/button_border_sign_up"
+            android:paddingBottom="30dp"
+            android:paddingEnd="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingStart="10dp"
+            android:paddingTop="5dp"
+            android:text="No posee historial" />
+
+       <!-- <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/imageView3"
+            android:layout_marginTop="38dp"
+            android:background="@drawable/button_border_sign_up">
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="@drawable/button_border_sign_up">
 
                 <TextView
                     android:id="@+id/textView18"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/button_border_sign_in"
                     android:paddingLeft="10dp"
                     android:text="Fecha"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/textView17"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/button_border_sign_in"
                     android:paddingLeft="10dp"
                     android:text="Estado"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
             </TableRow>
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:padding="5dp">
 
                 <TextView
                     android:id="@+id/fecha1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
-                    android:text="TextView" />
+                    android:text="TextView"
+                    android:textAlignment="viewStart" />
 
                 <TextView
                     android:id="@+id/status1"
@@ -70,66 +112,75 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
                     android:text="TextView"
-                    android:textAlignment="center" />
+                    android:textAlignment="viewStart" />
             </TableRow>
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:padding="5dp">
 
                 <TextView
                     android:id="@+id/fecha2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
-                    android:text="TextView" />
+                    android:text="TextView"
+                    android:textAlignment="viewStart" />
 
                 <TextView
                     android:id="@+id/status2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
-                    android:text="TextView" />
+                    android:text="TextView"
+                    android:textAlignment="viewStart" />
             </TableRow>
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:padding="5dp">
 
                 <TextView
                     android:id="@+id/fecha3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
-                    android:text="TextView" />
+                    android:text="TextView"
+                    android:textAlignment="viewStart" />
 
                 <TextView
                     android:id="@+id/status3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
-                    android:text="TextView" />
+                    android:text="TextView"
+                    android:textAlignment="viewStart" />
             </TableRow>
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:padding="5dp">
 
                 <TextView
                     android:id="@+id/fecha4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
-                    android:text="TextView" />
+                    android:text="TextView"
+                    android:textAlignment="viewStart" />
 
                 <TextView
                     android:id="@+id/status4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
-                    android:text="TextView" />
+                    android:text="TextView"
+                    android:textAlignment="viewStart" />
             </TableRow>
-        </TableLayout>
+        </TableLayout>-->
     </RelativeLayout>
 
 </FrameLayout>
