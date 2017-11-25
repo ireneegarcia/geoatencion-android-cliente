@@ -373,8 +373,7 @@ public class RatingFragment extends Fragment {
         // Creación de log
         APIService.Factory.getIntance().createLog(
                 "El cliente " + alarma.get(0).getUser().getDisplayName() +
-                        " ha dado una calificación de: "+ rating +" a la atención recibida" +
-                        " por la unidad: " + alarma.get(0).getNetwork(),
+                        " ha dado una calificación de: "+ rating +" a la atención recibida",
                 alarma.get(0).get_id(),
                 alarma.get(0).getUser().getId(),
                 _network,

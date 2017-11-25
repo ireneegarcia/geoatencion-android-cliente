@@ -92,7 +92,7 @@ public class HistoryFragment extends Fragment {
 
             for (int i = 0; i< alarma.size(); i++){
 
-                Log.d("history", ""+ alarma.get(0).getStatus());
+                Log.d("history", ""+ alarma.get(i).getStatus());
                 if(i == 0){
                     historial.setText("\n- "+formatF.format(formatI.parse(alarma.get(0).getCreated().substring(0,18))));
                     historial.setText(historial.getText() + ": " + alarma.get(0).getStatus());
