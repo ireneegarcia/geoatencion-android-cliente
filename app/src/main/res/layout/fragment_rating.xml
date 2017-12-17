@@ -21,7 +21,17 @@
             android:text="Fecha de atención:" />
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/unit_alarm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/date_alarm"
+            android:layout_alignStart="@+id/date_alarm"
+            android:layout_below="@+id/date_alarm"
+            android:layout_marginTop="13dp"
+            android:text="Unidad que realizo la atención:" />
+
+        <TextView
+            android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -34,7 +44,7 @@
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/textView6"
+            android:layout_below="@+id/title"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true">
 
@@ -115,7 +125,7 @@
             android:id="@+id/rating_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/textView6"
+            android:layout_below="@+id/title"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="74dp"
             android:text="TextView"
@@ -125,7 +135,7 @@
             android:id="@+id/send_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/textView6"
+            android:layout_below="@+id/title"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="120dp"
             android:background="@drawable/button_border_sign_in"

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -25,6 +26,7 @@ public class CategoriaAdapterListView extends BaseAdapter {
     private String mId;
     public static ArrayList<CategoriaServicios> resultado = new ArrayList<CategoriaServicios>();
     public static ArrayList<String> organismos = new ArrayList<>();
+    public static int[] color = {0xFF03899C,0xFF1F6B75,0xFF015965,0xFF36BBCE,0xFF5FC0CE,0xFF6D87D6};
 
     public CategoriaAdapterListView(Context context, String mId, List<CategoriaServicios> categorias, List<Solicitudes> solicitudes) {
         //super(context, 0, items);
@@ -42,6 +44,7 @@ public class CategoriaAdapterListView extends BaseAdapter {
         resultado = new ArrayList<CategoriaServicios>();
         //Log.d("solicitudes", solicitudes.size()+"");
         //Se filtran de todas las categorías cuales puede consumir el usuario logueado
+        if (solicitudes!=null)
         for (int i = 0; i< solicitudes.size(); i++){
             //Solicitudes del usuario y que esten aceptadas = afiliaciones
             if(solicitudes.get(i).getUser().getId().equals(mId) && solicitudes.get(i).getStatus().equals("aceptado")){
@@ -80,6 +83,7 @@ public class CategoriaAdapterListView extends BaseAdapter {
         TextView name;
         ImageView icon;
         String id;
+        LinearLayout background;
     }
 
     @Override
@@ -94,6 +98,7 @@ public class CategoriaAdapterListView extends BaseAdapter {
             view = new Fila();
             convertView = inflator.inflate(R.layout.layout_list_categoria_servicio, null);
             view.icon = (ImageView) convertView.findViewById(R.id.imageViewIcon);
+            view.background = (LinearLayout) convertView.findViewById(R.id.linearLayoutBackground);
             //  Logs.d("mytag icon", Variables.getUrl()+item.getIconUrl() + " - " + position);
             Glide
                     .with(this.context)
@@ -104,6 +109,7 @@ public class CategoriaAdapterListView extends BaseAdapter {
             view.name = (TextView) convertView.findViewById(R.id.textViewName);
             view.name.setText(item.getCategory());
             view.id = mId;
+            view.background.setBackgroundColor(color[position % 6]);
             convertView.setTag(view);
 
         } else {
@@ -118,6 +124,7 @@ public class CategoriaAdapterListView extends BaseAdapter {
             view.name = (TextView) convertView.findViewById(R.id.textViewName);
             view.name.setText(item.getCategory());
             view.id = mId;
+            view.background.setBackgroundColor(color[position % 6]);
         }
 
         //Setear la imagen desde el recurso drawable

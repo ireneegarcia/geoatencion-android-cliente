@@ -28,8 +28,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TableRow;
@@ -87,7 +87,7 @@ public class MapsFragment extends Fragment {
     static Context cp;
     static String notificacion = "";
     static String notificacionUbicacion = "";
-    ListView categorias;
+    GridView categorias;
     private static SetLocationPush slp = null;
 
     List<CategoriaServicios> categoriaServicio;
@@ -370,7 +370,7 @@ public class MapsFragment extends Fragment {
 
     public void obtenerAlarmas(){
         //id del usuario logueado
-        SharedPreferences settings = getActivity().getSharedPreferences("perfil", c.MODE_PRIVATE);
+        SharedPreferences settings = c.getSharedPreferences("perfil", c.MODE_PRIVATE);
         final String mId = settings.getString("id", null);
 
         alarma.clear();
@@ -540,26 +540,27 @@ public class MapsFragment extends Fragment {
             }
         });
 
-        network.setStatus("activo");
+        if ( network != null) {
+            network.setStatus("activo");
 
-        // Actualizar la unidad de atencion
-        APIService.Factory.getIntance().updateNetwork(network.get_id(), network).enqueue(new Callback<Networks>() {
-            @Override
-            public void onResponse(Call<Networks> call, Response<Networks> response) {
+            // Actualizar la unidad de atencion
+            APIService.Factory.getIntance().updateNetwork(network.get_id(), network).enqueue(new Callback<Networks>() {
+                @Override
+                public void onResponse(Call<Networks> call, Response<Networks> response) {
 
-                //code == 200
-                if(response.isSuccessful()) {
-                    Log.d("my tag", "onResponse: todo fino DEL LOG");
+                    //code == 200
+                    if(response.isSuccessful()) {
+                        Log.d("my tag", "onResponse: todo fino DEL LOG");
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<Networks> call, Throwable t){
-                //
-                Log.d("myTag", "This is my message on failure " + call.request().url());
-            }
-        });
-
+                @Override
+                public void onFailure(Call<Networks> call, Throwable t){
+                    //
+                    Log.d("myTag", "This is my message on failure " + call.request().url());
+                }
+            });
+        }
 
         // Creación de log
         APIService.Factory.getIntance().createLog(
@@ -630,7 +631,7 @@ public class MapsFragment extends Fragment {
             }
         });
 
-        categorias = (ListView) layout.findViewById(R.id.listViewCategorias);
+        categorias = (GridView) layout.findViewById(R.id.listViewCategorias);
 
         Log.d("estatus", "createSimpleDialog: "+statusAtencion);
         if (statusAtencion.equals("") || statusAtencion.equals("cancelado por el cliente")) {

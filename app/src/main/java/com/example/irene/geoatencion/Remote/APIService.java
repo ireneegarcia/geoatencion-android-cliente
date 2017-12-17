@@ -37,17 +37,17 @@ public interface APIService {
     @POST("api/auth/signin")
     @FormUrlEncoded
     Call<Users> login(@Field("usernameOrEmail") String username,
-                       @Field("password") String password);
+                      @Field("password") String password);
 
     @POST("api/alarms")
     @FormUrlEncoded
     Call<Alarma> createAlarm(@Field("categoryService") String categoryService,
-                        @Field("status") String status,
-                        @Field("latitude") String latitude,
-                        @Field("longitude") String longitude,
-                        @Field("address") String address,
-                        @Field("organism") String organism,
-                        @Field("user") String user);
+                             @Field("status") String status,
+                             @Field("latitude") String latitude,
+                             @Field("longitude") String longitude,
+                             @Field("address") String address,
+                             @Field("organism") String organism,
+                             @Field("user") String user);
 
     @POST("/api/logs")
     @FormUrlEncoded
@@ -60,7 +60,7 @@ public interface APIService {
     @POST("/api/firebasetokens")
     @FormUrlEncoded
     Call<FirebaseToken> registerToken(@Field("token") String token,
-                                @Field("userId") String user);
+                                      @Field("userId") String user);
 
     @GET("api/categoriaservicios")
     Call<List<CategoriaServicios>> listCategories();
@@ -76,12 +76,12 @@ public interface APIService {
 
     @PUT("/api/alarms/{alarmId}")
     Call<Alarma> updateAlarm(@Path("alarmId") String alarmId,
-                            @Body Alarma alarma);
+                             @Body Alarma alarma);
 
 
     @PUT("/api/networks/{networkId}")
     Call<Networks> updateNetwork(@Path("networkId") String networkId,
-                            @Body Networks network);
+                                 @Body Networks network);
 
 
 

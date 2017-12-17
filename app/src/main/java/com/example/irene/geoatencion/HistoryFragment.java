@@ -4,20 +4,21 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.irene.geoatencion.Model.Alarmas;
+import com.example.irene.geoatencion.Model.HistoryAdapterList;
+import com.example.irene.geoatencion.Model.Networks;
 import com.example.irene.geoatencion.Remote.APIService;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,6 +29,7 @@ public class HistoryFragment extends Fragment {
     View mView;
     Context c;
     ArrayList<Alarmas> alarma;
+    Networks network;
 
     public HistoryFragment() {
         // Required empty public constructor
@@ -81,9 +83,70 @@ public class HistoryFragment extends Fragment {
         adaptarVista();
     }
 
+    public void obtenerNetwork(final Alarmas _alarma){
+
+        final TextView unidad = (TextView) mView.findViewById(R.id.textView9);
+        final TextView placa = (TextView) mView.findViewById(R.id.textView19);
+        final TextView marca = (TextView) mView.findViewById(R.id.textView21);
+        final TextView modelo = (TextView) mView.findViewById(R.id.textView23);
+        final TextView color = (TextView) mView.findViewById(R.id.textView16);
+        final CardView cardView = (CardView) mView.findViewById(R.id.cardView);
+
+        //id del usuario logueado
+        SharedPreferences settings = c.getSharedPreferences("perfil", c.MODE_PRIVATE);
+        final String mId = settings.getString("id", null);
+
+        APIService.Factory.getIntance().listNetworks().enqueue(new Callback<List<Networks>>() {
+            @Override
+            public void onResponse(Call<List<Networks>> call, Response<List<Networks>> response) {
+
+                //code == 200
+                if(response.isSuccessful()) {
+
+                    for (int i = 0; i< response.body().size(); i++){
+                        // si la unidad pertenece al usuario
+                        if(response.body().get(i).get_id().equals(_alarma.getNetwork())){
+                            network = response.body().get(i);
+                        }
+                    }
+                    if (network != null) {
+                        Log.d("unidad", "unidad: "+network.getCarCode());
+                        cardView.setVisibility(View.VISIBLE);
+                        unidad.setText(network.getCarCode());
+                        placa.setText(network.getCarPlate());
+                        marca.setText(network.getCarBrand());
+                        modelo.setText(network.getCarModel());
+                        color.setText(network.getCarColor());
+                    } else {
+                        cardView.setVisibility(View.GONE);
+                    }
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Networks>> call, Throwable t){
+                //
+                Log.d("myTag", "This is my message on failure " + call.request().url());
+                Log.d("myTag", "This is my message on failure " + t.toString());
+            }
+        });
+
+    }
+
     public void adaptarVista(){
 
-        final TextView historial = (TextView) mView.findViewById(R.id.textView4);
+
+        if ( alarma.size() != 0) {
+            ListView l = (ListView) mView.findViewById(R.id.listViewHistory);
+            l.setAdapter( new HistoryAdapterList(c,alarma));
+            obtenerNetwork(alarma.get(0));
+        }
+
+
+
+        /*final TextView historial = (TextView) mView.findViewById(R.id.textView4);
 
         SimpleDateFormat formatI = new SimpleDateFormat("yyy-MM-dd'T'HH:mm:ss", Locale.US);
         SimpleDateFormat formatF = new SimpleDateFormat("yyyy-MM-dd, hh:mm aaa", Locale.US);
@@ -104,6 +167,6 @@ public class HistoryFragment extends Fragment {
 
         } catch (ParseException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 }

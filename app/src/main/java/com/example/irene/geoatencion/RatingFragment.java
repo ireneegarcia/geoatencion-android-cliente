@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.example.irene.geoatencion.Model.Alarma;
 import com.example.irene.geoatencion.Model.Alarmas;
 import com.example.irene.geoatencion.Model.Logs;
+import com.example.irene.geoatencion.Model.Networks;
 import com.example.irene.geoatencion.Remote.APIService;
 
 import java.text.ParseException;
@@ -37,6 +38,7 @@ public class RatingFragment extends Fragment {
     View mView;
     Context c;
     ArrayList<Alarmas> alarma = new ArrayList<>();
+    ArrayList<String> network = new ArrayList<>();
     Integer rating = 0;
 
     public RatingFragment() {
@@ -88,6 +90,42 @@ public class RatingFragment extends Fragment {
 
     }
 
+    public void obtenerUnidad(){
+
+        network.clear();
+        //id del usuario logueado
+        SharedPreferences settings = c.getSharedPreferences("perfil", c.MODE_PRIVATE);
+        final String mId = settings.getString("id", null);
+
+        APIService.Factory.getIntance().listNetworks().enqueue(new Callback<List<Networks>>() {
+            @Override
+            public void onResponse(Call<List<Networks>> call, Response<List<Networks>> response) {
+
+                //code == 200
+                if(response.isSuccessful()) {
+                    for (int i = 0; i< alarma.size(); i++){
+                        for (int j = 0; j< response.body().size(); j++){
+                            // si la unidad coincide con la unidad de las alarmas a calificar
+                            if(alarma.get(i).getNetwork().equals(response.body().get(j).get_id())){
+                                network.add(response.body().get(j).getCarCode());
+                            }
+                        }
+                    }
+                    mensaje();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Networks>> call, Throwable t){
+                //
+                Log.d("myTag", "This is my message on failure " + call.request().url());
+                Log.d("myTag", "This is my message on failure " + t.toString());
+            }
+        });
+
+
+    }
+
     public void obtenerAlarmas(){
 
         alarma.clear();
@@ -112,10 +150,8 @@ public class RatingFragment extends Fragment {
                             alarma.add(response.body().get(i));
                         }
                     }
-                    mensaje();
+                    obtenerUnidad();
 
-                    //Logs.d("AlarmaFragment", "--->on reponse " + response.body().toString());
-                    //Logs.d("myTag", "--->on reponse " + call.request().url());
                 }
             }
 
@@ -129,8 +165,9 @@ public class RatingFragment extends Fragment {
 
     public void mensaje(){
 
-        final TextView title = (TextView) mView.findViewById(R.id.textView6);
+        final TextView title = (TextView) mView.findViewById(R.id.title);
         final TextView date_alarm = (TextView) mView.findViewById(R.id.date_alarm);
+        final TextView unit_alarm = (TextView) mView.findViewById(R.id.unit_alarm);
 
         final ImageButton rating1 = (ImageButton) mView.findViewById(R.id.rating1);
         final ImageButton rating2 = (ImageButton) mView.findViewById(R.id.rating2);
@@ -152,6 +189,7 @@ public class RatingFragment extends Fragment {
 
             rating_text.setVisibility(View.GONE);
             date_alarm.setVisibility(View.GONE);
+            unit_alarm.setVisibility(View.GONE);
             send_button.setVisibility(View.GONE);
             rating1.setVisibility(View.GONE);
             rating2.setVisibility(View.GONE);
@@ -170,7 +208,8 @@ public class RatingFragment extends Fragment {
             SimpleDateFormat formatF = new SimpleDateFormat("yyyy-MM-dd, hh:mm aaa", Locale.US);
 
             try {
-                date_alarm.setText("Fecha de atención: "+formatF.format(formatI.parse(alarma.get(0).getCreated().substring(0,18))));
+                date_alarm.setText("Fecha de atención: " + formatF.format(formatI.parse(alarma.get(0).getCreated().substring(0,18))));
+                unit_alarm.setText("Unidad que realizo la atención: " + network.get(0));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -350,9 +389,6 @@ public class RatingFragment extends Fragment {
                 alarma.get(0).getIcon(),
                 "");
 
-        //alarma.get(0).setRating(rating+"");
-
-        Log.d("enviarCalification", "SE ENVIO "+ enviarAlarma );
         APIService.Factory.getIntance().updateAlarm(enviarAlarma.get_id(), enviarAlarma).enqueue(new Callback<Alarma>() {
             @Override
             public void onResponse(Call<Alarma> call, Response<Alarma> response) {
@@ -369,14 +405,13 @@ public class RatingFragment extends Fragment {
                 Log.d("myTag", "This is my message on failure " + call.request().url());
             }
         });
-
         // Creación de log
         APIService.Factory.getIntance().createLog(
                 "El cliente " + alarma.get(0).getUser().getDisplayName() +
                         " ha dado una calificación de: "+ rating +" a la atención recibida",
                 alarma.get(0).get_id(),
                 alarma.get(0).getUser().getId(),
-                _network,
+                network.get(0),
                 alarma.get(0).getOrganism()).enqueue(new Callback<Logs>() {
             @Override
             public void onResponse(Call<Logs> call, Response<Logs> response) {
