@@ -10,8 +10,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.example.irene.geoatencion.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,9 +100,14 @@ public class CategoriaAdapterListView extends BaseAdapter {
             view.icon = (ImageView) convertView.findViewById(R.id.imageViewIcon);
             view.background = (LinearLayout) convertView.findViewById(R.id.linearLayoutBackground);
             //  Logs.d("mytag icon", Variables.getUrl()+item.getIconUrl() + " - " + position);
-            Glide
+            /*Glide
                     .with(this.context)
                     .load(Variables.getUrl()+item.getIconUrl())
+                    .error(R.drawable.logo_icono)
+                    .into(view.icon);*/
+            Picasso.with(this.context)
+                    .load(Variables.getUrl()+item.getIconUrl())
+                    .placeholder(R.drawable.logo_icono)
                     .error(R.drawable.logo_icono)
                     .into(view.icon);
             // view.icon. (item.getIconUrl());
@@ -116,9 +121,14 @@ public class CategoriaAdapterListView extends BaseAdapter {
             view = (Fila) convertView.getTag();
             view.icon = (ImageView) convertView.findViewById(R.id.imageViewIcon);
             // Logs.d("mytag icon", Variables.getUrl()+item.getIconUrl() + " - " + position);
-            Glide
+            /*Glide
                     .with(this.context)
                     .load(Variables.getUrl()+item.getIconUrl())
+                    .error(R.drawable.logo_icono)
+                    .into(view.icon);*/
+            Picasso.with(this.context)
+                    .load(Variables.getUrl()+item.getIconUrl())
+                    .placeholder(R.drawable.logo_icono)
                     .error(R.drawable.logo_icono)
                     .into(view.icon);
             view.name = (TextView) convertView.findViewById(R.id.textViewName);

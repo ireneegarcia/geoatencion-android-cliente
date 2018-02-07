@@ -29,6 +29,13 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        SharedPreferences settings = getSharedPreferences("perfil", MODE_PRIVATE);
+        if (settings.getString("id", null)==null){
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
         if (getIntent().getExtras() != null) {
             Log.d("firebase", "DATOS RECIBIDOS MAIN ACTIVITY");
             Log.d("firebase", "Latitud: " + getIntent().getExtras().getString("networkLatitude"));
@@ -42,12 +49,6 @@ public class MainActivity extends AppCompatActivity
                     getIntent().getExtras().getString("networkCode"),
                     getIntent().getExtras().getString("status"));
             MapsFragment.AgregarMarcadorPush(notification);
-        }
-
-        SharedPreferences settings = getSharedPreferences("perfil", MODE_PRIVATE);
-        if (settings.getString("id", null)==null){
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(intent);
         }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

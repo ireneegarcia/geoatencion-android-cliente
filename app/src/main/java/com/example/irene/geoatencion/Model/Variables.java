@@ -5,7 +5,7 @@ package com.example.irene.geoatencion.Model;
  */
 
 public class Variables {
-    private static String url = "http://192.168.0.150:3000/";
+    private static String url = "http://xpectra-geoatt.southcentralus.cloudapp.azure.com/";
 
     public static String getUrl() {
         return url;

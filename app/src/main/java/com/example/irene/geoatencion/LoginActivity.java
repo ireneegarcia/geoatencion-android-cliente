@@ -355,6 +355,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             public void onFailure(Call<Users> call, Throwable t){
                 //
                 Log.d("myTag", "This is my message on failure " + call.request().url());
+                showProgress(false);
             }
         });
 

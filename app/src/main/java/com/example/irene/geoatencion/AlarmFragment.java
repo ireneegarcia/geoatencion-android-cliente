@@ -88,6 +88,8 @@ public class AlarmFragment extends Fragment {
                         }else{
                             statusAtencion();
                         }
+                    } else {
+                        statusSinAtencion();
                     }
 
                 }
@@ -169,25 +171,28 @@ public class AlarmFragment extends Fragment {
             }
         });
 
-        network.setStatus("activo");
+        if (network != null){
+            network.setStatus("activo");
 
-        // Actualizar la unidad de atencion
-        APIService.Factory.getIntance().updateNetwork(network.get_id(), network).enqueue(new Callback<Networks>() {
-            @Override
-            public void onResponse(Call<Networks> call, Response<Networks> response) {
+            // Actualizar la unidad de atencion
+            APIService.Factory.getIntance().updateNetwork(network.get_id(), network).enqueue(new Callback<Networks>() {
+                @Override
+                public void onResponse(Call<Networks> call, Response<Networks> response) {
 
-                //code == 200
-                if(response.isSuccessful()) {
-                    Log.d("my tag", "onResponse: todo fino DEL LOG");
+                    //code == 200
+                    if(response.isSuccessful()) {
+                        Log.d("my tag", "onResponse: todo fino DEL LOG");
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<Networks> call, Throwable t){
-                //
-                Log.d("myTag", "This is my message on failure " + call.request().url());
-            }
-        });
+                @Override
+                public void onFailure(Call<Networks> call, Throwable t){
+                    //
+                    Log.d("myTag", "This is my message on failure " + call.request().url());
+                }
+            });
+        }
+
 
         // Creación de log
         APIService.Factory.getIntance().createLog(
@@ -212,8 +217,18 @@ public class AlarmFragment extends Fragment {
                 Log.d("myTag", "This is my message on failure " + call.request().url());
             }
         });
+
+        obtenerAlarmas();
     }
 
+    public void statusSinAtencion(){
+        final TextView status = (TextView) mView.findViewById(R.id.textViewMessage);
+        final TableRow row2 = (TableRow) mView.findViewById(R.id.row_status);
+        final TableRow row1 = (TableRow) mView.findViewById(R.id.row_status1);
+        status.setText("No posee alerta en proceso");
+        row1.setVisibility(View.GONE);
+        row2.setVisibility(View.GONE);
+    }
     public void statusAtencion(){
 
         final TextView status = (TextView) mView.findViewById(R.id.textViewMessage);
@@ -291,6 +306,7 @@ public class AlarmFragment extends Fragment {
             imageStatusA1.setVisibility(View.GONE);
             imageStatusP1.setVisibility(View.VISIBLE);
             row.setVisibility(View.GONE);
+            cancelar.setVisibility(View.GONE);
             message.setVisibility(View.VISIBLE);
         }
         else if (alarma.get(0).getStatus().equals("rechazado")){
