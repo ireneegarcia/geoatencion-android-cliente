@@ -20,6 +20,7 @@ import com.example.irene.geoatencion.Model.Alarma;
 import com.example.irene.geoatencion.Model.Alarmas;
 import com.example.irene.geoatencion.Model.Logs;
 import com.example.irene.geoatencion.Model.Networks;
+import com.example.irene.geoatencion.Model.Users;
 import com.example.irene.geoatencion.Remote.APIService;
 
 import java.util.ArrayList;
@@ -39,6 +40,8 @@ public class AlarmFragment extends Fragment {
     Context c;
     ArrayList<Alarmas> alarma;
     Networks network;
+    String conductorUnidad;
+    String telefonoUnidad;
     //List<Alarma> alarma;
 
     public AlarmFragment() {
@@ -120,7 +123,8 @@ public class AlarmFragment extends Fragment {
                         // si la unidad pertenece al usuario
                         if(response.body().get(i).get_id().equals(_alarma.getNetwork())){
                             network = response.body().get(i);
-                            statusAtencion();
+                            obtenerResponsable();
+
                         }
                     }
                 }
@@ -129,6 +133,38 @@ public class AlarmFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<Networks>> call, Throwable t){
+                //
+                Log.d("myTag", "This is my message on failure " + call.request().url());
+                Log.d("myTag", "This is my message on failure " + t.toString());
+            }
+        });
+
+    }
+
+    public void obtenerResponsable(){
+
+        APIService.Factory.getIntance().listUsers().enqueue(new Callback<List<Users>>() {
+            @Override
+            public void onResponse(Call<List<Users>> call, Response<List<Users>> response) {
+
+                //code == 200
+                if(response.isSuccessful()) {
+                    Log.d("my tag", "onResponse: todo fino");
+                    for (int i = 0; i< response.body().size(); i++){
+                        // si la unidad pertenece al usuario
+                        if(network.getServiceUser().equals(response.body().get(i).getId())){
+                            telefonoUnidad = response.body().get(i).getPhone();
+                            conductorUnidad = response.body().get(i).getDisplayName();
+                            statusAtencion();
+
+                        }
+                    }
+                }
+                Log.d("my tag", "onResponse: todo fino "+ network);
+            }
+
+            @Override
+            public void onFailure(Call<List<Users>> call, Throwable t){
                 //
                 Log.d("myTag", "This is my message on failure " + call.request().url());
                 Log.d("myTag", "This is my message on failure " + t.toString());
@@ -249,6 +285,8 @@ public class AlarmFragment extends Fragment {
         final TextView modelo = (TextView) mView.findViewById(R.id.modelo);
         final TextView marca = (TextView) mView.findViewById(R.id.marca);
         final TextView color = (TextView) mView.findViewById(R.id.color);
+        final TextView conductor = (TextView) mView.findViewById(R.id.conductor);
+        final TextView telefono = (TextView) mView.findViewById(R.id.telefono);
 
         cancelar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -283,7 +321,8 @@ public class AlarmFragment extends Fragment {
             modelo.setText(network.getCarModel());
             marca.setText(network.getCarBrand());
             color.setText(network.getCarColor());
-
+            conductor.setText(conductorUnidad);
+            telefono.setText(telefonoUnidad);
 
         }
         else if (alarma.get(0).getStatus().equals("cancelado por el operador")){

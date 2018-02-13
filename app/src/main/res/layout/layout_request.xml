@@ -127,7 +127,7 @@
 
         </TableLayout>
 
-        <Button
+        <!--<Button
             android:id="@+id/cancelar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -139,10 +139,10 @@
             android:layout_marginRight="24dp"
             android:layout_marginTop="146dp"
             android:background="@drawable/button_border_cancel"
-            android:text="Cancelar"
+            android:text="Aceptar"
             android:textColor="@android:color/background_light"
             android:textStyle="bold"
-            android:visibility="gone" />
+            android:visibility="gone" />-->
 
         <ProgressBar
             android:id="@+id/progressBarMessage"

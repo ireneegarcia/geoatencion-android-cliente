@@ -142,7 +142,7 @@ public class HistoryFragment extends Fragment {
         if ( alarma.size() != 0) {
             ListView l = (ListView) mView.findViewById(R.id.listViewHistory);
             l.setAdapter( new HistoryAdapterList(c,alarma));
-            if (alarma.get(0).getStatus() == "en atencion") {
+            if (alarma.get(0).getStatus().equals("en atencion")) {
                 obtenerNetwork(alarma.get(0));
             } else {
                 cardView.setVisibility(View.GONE);

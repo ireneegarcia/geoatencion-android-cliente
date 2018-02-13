@@ -73,6 +73,9 @@ public interface APIService {
     @GET("api/networks")
     Call<List<Networks>> listNetworks();
 
+    @GET("api/users")
+    Call<List<Users>> listUsers();
+
     @PUT("/api/alarms/{alarmId}")
     Call<Alarma> updateAlarm(@Path("alarmId") String alarmId,
                              @Body Alarma alarma);

@@ -27,7 +27,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -113,6 +112,7 @@ public class MapsFragment extends Fragment {
     // Objetos para traer el json de la api de google map y fragmentar el polyline
     RouteSet routeSet = new RouteSet();
     RouteGet routeGet = new RouteGet();
+    static String routeTime = "";
 
     public MapsFragment() {
         // Required empty public constructor
@@ -425,7 +425,8 @@ public class MapsFragment extends Fragment {
                             MarkerOptions options = new MarkerOptions();
                             IconGenerator iconFactory = new IconGenerator(cp);
                             iconFactory.setStyle(IconGenerator.STYLE_BLUE);
-                            options.icon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon(DateFormat.getTimeInstance().format(new Date()))));
+                            //options.icon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon(DateFormat.getTimeInstance().format(new Date()))));
+                            options.icon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon("Llegada en: "+routeTime)));
                             options.anchor(iconFactory.getAnchorU(), iconFactory.getAnchorV());
                             //options.title("Mi posición actual");
                             options.snippet(response.body().get(i).getAddress());
@@ -433,7 +434,8 @@ public class MapsFragment extends Fragment {
                             LatLng currentLatLng = new LatLng(Double.parseDouble(response.body().get(i).getLatitude()), Double.parseDouble(response.body().get(i).getLongitude()));
                             options.position(currentLatLng);
                             Marker mapMarker = googleMap.addMarker(options);
-                            mapMarker.setTitle(response.body().get(i).getCarCode());
+                            // mapMarker.setTitle(response.body().get(i).getCarCode());
+                            mapMarker.setTitle("Tiempo estimado de llegada: " + routeTime);
                             Log.d("my tag", "Marcador añadido.............................");
                             // For zooming automatically to the location of the marker
                             /*googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng,
@@ -476,7 +478,7 @@ public class MapsFragment extends Fragment {
                 //code == 200
                 if(response.isSuccessful() && response.body().getRoutes().size() != 0 && response.body().getRoutes().get(0).getLegs().size() != 0) {
                     routeGet = response.body();
-
+                    routeTime = routeGet.getRoutes().get(0).getLegs().get(0).getDuration().getText();
                     for (int i = 0; i< routeGet.getRoutes().get(0).getLegs().get(0).getSteps().size(); i++){
                         Log.d("routes", "onResponse: "+i);
                         /*Log.d("jsonroute", "Lat" + routeGet.getRoutes().get(0).getLegs().get(0).getSteps().get(i).getStartLocation().getLat().toString());
@@ -597,7 +599,7 @@ public class MapsFragment extends Fragment {
             statusAtencion = alarma.get(0).getStatus();
         }
         final AlertDialog.Builder builder = new AlertDialog.Builder(cp);
-        LayoutInflater inflater = (LayoutInflater)cp.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final LayoutInflater inflater = (LayoutInflater)cp.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         //id del usuario logueado
         SharedPreferences settings = cp.getSharedPreferences("perfil", cp.MODE_PRIVATE);
@@ -619,15 +621,16 @@ public class MapsFragment extends Fragment {
         final ImageView imageStatusP3 = (ImageView) layout.findViewById(R.id.imageViewProcesed2);
         final TableRow row = (TableRow) layout.findViewById(R.id.row_status);
         final RelativeLayout message = layout.findViewById(R.id.message);
-        final Button cancelar = (Button) layout.findViewById(R.id.cancelar);
+        // final Button cancelar = (Button) layout.findViewById(R.id.cancelar);
         //final Button nueva_alarma = (Button) layout.findViewById(R.id.nueva_alarma);
 
-        cancelar.setOnClickListener(new View.OnClickListener() {
+        /*cancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 actualizarAlarma();
+
             }
-        });
+        });*/
 
         categorias = (GridView) layout.findViewById(R.id.listViewCategorias);
 
@@ -688,12 +691,23 @@ public class MapsFragment extends Fragment {
                 imageStatusP.setVisibility(View.VISIBLE);
                 progreso.setVisibility(View.GONE);
                 categorias.setVisibility(View.GONE);
-                cancelar.setVisibility(View.VISIBLE);
+                // cancelar.setVisibility(View.VISIBLE);
                 message.setVisibility(View.VISIBLE);
+                builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.cancel();
+                    }}
+                );
             }
             else if (statusAtencion.equals("en atencion")){
                 status.setText("Alarma enviada de manera exitosa");
                 status1.setText("Unidad enviada");
+                if (!routeTime.equals("")) {
+                    status2.setText("Tiempo estimado de llegada: "+ routeTime);
+                }
                 imageStatusA.setVisibility(View.GONE);
                 imageStatusP.setVisibility(View.VISIBLE);
                 imageStatusA1.setVisibility(View.GONE);
@@ -701,7 +715,15 @@ public class MapsFragment extends Fragment {
                 progreso.setVisibility(View.GONE);
                 categorias.setVisibility(View.GONE);
                 message.setVisibility(View.VISIBLE);
-                cancelar.setVisibility(View.VISIBLE);
+               //  cancelar.setVisibility(View.VISIBLE);
+                builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.cancel();
+                    }}
+                );
             }
             else if (statusAtencion.equals("cancelado por el operador")){
                 status.setText("Alarma enviada de manera exitosa");
@@ -849,7 +871,8 @@ public class MapsFragment extends Fragment {
                 MarkerOptions options = new MarkerOptions();
                 IconGenerator iconFactory = new IconGenerator(cp);
                 iconFactory.setStyle(IconGenerator.STYLE_BLUE);
-                options.icon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon(DateFormat.getTimeInstance().format(new Date()))));
+                //options.icon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon(DateFormat.getTimeInstance().format(new Date()))));
+                options.icon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon("Llegada en: "+routeTime)));
                 options.anchor(iconFactory.getAnchorU(), iconFactory.getAnchorV());
                 //options.title("Mi posición actual");
                 options.snippet(noti.getNetworkAddress());
@@ -857,7 +880,8 @@ public class MapsFragment extends Fragment {
                 LatLng currentLatLng = new LatLng(Double.parseDouble(noti.getNetworkLatitude()), Double.parseDouble(noti.getNetworkLongitude()));
                 options.position(currentLatLng);
                 Marker mapMarker = googleMap.addMarker(options);
-                mapMarker.setTitle(noti.getNetworkCode());
+                // mapMarker.setTitle(noti.getNetworkCode());
+                mapMarker.setTitle("Tiempo estimado de llegada: " + routeTime);
                 Log.d("my tag", "Marcador añadido.............................");
                 // For zooming automatically to the location of the marker
                 /*googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng,
