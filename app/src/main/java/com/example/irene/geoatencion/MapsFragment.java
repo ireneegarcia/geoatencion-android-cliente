@@ -47,7 +47,6 @@ import com.example.irene.geoatencion.Model.RouteSet;
 import com.example.irene.geoatencion.Model.Solicitudes;
 import com.example.irene.geoatencion.Remote.APIService;
 import com.example.irene.geoatencion.Remote.APIServiceRoute;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
@@ -379,7 +378,7 @@ public class MapsFragment extends Fragment {
             @Override
             public void onResponse(Call<List<Alarmas>> call, Response<List<Alarmas>> response) {
 
-                if(response.isSuccessful()) {
+                if(response.isSuccessful() && response.body().size() != 0) {
 
                     for (int i = 0; i< response.body().size(); i++){
                         // si la alarma pertenece al usuario
@@ -416,7 +415,7 @@ public class MapsFragment extends Fragment {
             public void onResponse(Call<List<Networks>> call, Response<List<Networks>> response) {
 
                 //code == 200
-                if(response.isSuccessful()) {
+                if(response.isSuccessful() && response.body().size() != 0) {
 
                     for (int i = 0; i< response.body().size(); i++){
                         // si la unidad pertenece al usuario
@@ -437,8 +436,8 @@ public class MapsFragment extends Fragment {
                             mapMarker.setTitle(response.body().get(i).getCarCode());
                             Log.d("my tag", "Marcador añadido.............................");
                             // For zooming automatically to the location of the marker
-                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng,
-                                    14));
+                            /*googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng,
+                                    14));*/
                             Log.d("my tag", "Zoom hecho.............................");
 
                             makeURL(Double.parseDouble(alarma.get(alarma.size()-1).getLatitude()),
@@ -475,7 +474,7 @@ public class MapsFragment extends Fragment {
             public void onResponse(Call<RouteGet> call, Response<RouteGet> response) {
 
                 //code == 200
-                if(response.isSuccessful()) {
+                if(response.isSuccessful() && response.body().getRoutes().size() != 0 && response.body().getRoutes().get(0).getLegs().size() != 0) {
                     routeGet = response.body();
 
                     for (int i = 0; i< routeGet.getRoutes().get(0).getLegs().get(0).getSteps().size(); i++){
@@ -567,7 +566,6 @@ public class MapsFragment extends Fragment {
                 "Ha sido cancelada la solicitud de atención " + alarma.get(0).get_id() +
                         " por el cliente " + alarma.get(0).getUser().getDisplayName(),
                 alarma.get(0).get_id(),
-                alarma.get(0).getUser().getId(),
                 "",
                 alarma.get(0).getOrganism()).enqueue(new Callback<Logs>() {
             @Override
@@ -814,8 +812,8 @@ public class MapsFragment extends Fragment {
         mapMarker.setTitle("Mi posición actual");
         Log.d("my tag", "Marcador añadido.............................");
         // For zooming automatically to the location of the marker
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng,
-                14));
+       /* googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng,
+                14));*/
         Log.d("my tag", "Zoom hecho.............................");
 
         /*googleMap.addMarker(new MarkerOptions().position(currentLatLng)
@@ -862,8 +860,8 @@ public class MapsFragment extends Fragment {
                 mapMarker.setTitle(noti.getNetworkCode());
                 Log.d("my tag", "Marcador añadido.............................");
                 // For zooming automatically to the location of the marker
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng,
-                        14));
+                /*googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng,
+                        14));*/
                 Log.d("my tag", "Zoom hecho.............................");
             }
             notificacion = (noti.getStatus());

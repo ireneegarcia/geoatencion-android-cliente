@@ -410,7 +410,6 @@ public class RatingFragment extends Fragment {
                 "El cliente " + alarma.get(0).getUser().getDisplayName() +
                         " ha dado una calificación de: "+ rating +" a la atención recibida",
                 alarma.get(0).get_id(),
-                alarma.get(0).getUser().getId(),
                 network.get(0),
                 alarma.get(0).getOrganism()).enqueue(new Callback<Logs>() {
             @Override
