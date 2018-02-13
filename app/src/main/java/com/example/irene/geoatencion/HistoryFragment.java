@@ -110,7 +110,7 @@ public class HistoryFragment extends Fragment {
                         }
                     }
                     if (network != null) {
-                        Log.d("unidad", "unidad: "+network.getCarCode());
+                        // Log.d("unidad", "unidad: "+network.getCarCode());
                         cardView.setVisibility(View.VISIBLE);
                         unidad.setText(network.getCarCode());
                         placa.setText(network.getCarPlate());
@@ -137,36 +137,18 @@ public class HistoryFragment extends Fragment {
 
     public void adaptarVista(){
 
+        final CardView cardView = (CardView) mView.findViewById(R.id.cardView);
 
         if ( alarma.size() != 0) {
             ListView l = (ListView) mView.findViewById(R.id.listViewHistory);
             l.setAdapter( new HistoryAdapterList(c,alarma));
-            obtenerNetwork(alarma.get(0));
-        }
-
-
-
-        /*final TextView historial = (TextView) mView.findViewById(R.id.textView4);
-
-        SimpleDateFormat formatI = new SimpleDateFormat("yyy-MM-dd'T'HH:mm:ss", Locale.US);
-        SimpleDateFormat formatF = new SimpleDateFormat("yyyy-MM-dd, hh:mm aaa", Locale.US);
-
-        try {
-
-            for (int i = 0; i< alarma.size(); i++){
-
-                Log.d("history", ""+ alarma.get(i).getStatus());
-                if(i == 0){
-                    historial.setText("\n- "+formatF.format(formatI.parse(alarma.get(0).getCreated().substring(0,18))));
-                    historial.setText(historial.getText() + ": " + alarma.get(0).getStatus());
-                } else {
-                    historial.setText(historial.getText() + "\n\n- "+formatF.format(formatI.parse(alarma.get(i).getCreated().substring(0,18))));
-                    historial.setText(historial.getText() + ": " + alarma.get(i).getStatus());
-                }
+            if (alarma.get(0).getStatus() == "en atencion") {
+                obtenerNetwork(alarma.get(0));
+            } else {
+                cardView.setVisibility(View.GONE);
             }
 
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }*/
+        }
+
     }
 }

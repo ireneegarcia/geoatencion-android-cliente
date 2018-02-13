@@ -14,6 +14,8 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
+import static com.example.irene.geoatencion.MapsFragment.categoriaServicio;
+
 /**
  * Created by Irene on 16/12/2017.
  */
@@ -46,8 +48,20 @@ public class HistoryAdapterList extends BaseAdapter {
 
     public static class Fila
     {
+        TextView category;
         TextView status;
         TextView date;
+    }
+
+    public String getCategory(final String category){
+
+        for (int i = 0; i< categoriaServicio.size(); i++){
+            if (categoriaServicio.get(i).getId().equals(category)) {
+                return categoriaServicio.get(i).getCategory();
+            }
+        }
+
+        return "";
     }
 
     @Override
@@ -64,8 +78,10 @@ public class HistoryAdapterList extends BaseAdapter {
             view = new Fila();
             convertView = inflator.inflate(R.layout.layout_list_history, null);
             view.status = (TextView) convertView.findViewById(R.id.textViewStatus);
+            view.category = (TextView) convertView.findViewById(R.id.textViewCategory);
             view.date = (TextView) convertView.findViewById(R.id.textViewDate);
             view.status.setText(item.getStatus());
+            view.category.setText(getCategory(item.getCategoryService()));
             try {
                 view.date.setText(formatF.format(formatI.parse(item.getCreated().substring(0,18))));
             } catch (ParseException e) {
@@ -76,8 +92,10 @@ public class HistoryAdapterList extends BaseAdapter {
         } else {
             view = (Fila) convertView.getTag();
             view.status = (TextView) convertView.findViewById(R.id.textViewStatus);
+            view.category = (TextView) convertView.findViewById(R.id.textViewCategory);
             view.date = (TextView) convertView.findViewById(R.id.textViewDate);
             view.status.setText(item.getStatus());
+            view.category.setText(getCategory(item.getCategoryService()));
             try {
                 view.date.setText(formatF.format(formatI.parse(item.getCreated().substring(0,18))));
             } catch (ParseException e) {

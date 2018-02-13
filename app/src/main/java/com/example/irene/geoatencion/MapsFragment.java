@@ -89,7 +89,7 @@ public class MapsFragment extends Fragment {
     GridView categorias;
     private static SetLocationPush slp = null;
 
-    List<CategoriaServicios> categoriaServicio;
+    public static List<CategoriaServicios> categoriaServicio;
     List<Solicitudes> solicitudes;
     ArrayList<Alarmas> alarma = new ArrayList<>();
     Networks network;
