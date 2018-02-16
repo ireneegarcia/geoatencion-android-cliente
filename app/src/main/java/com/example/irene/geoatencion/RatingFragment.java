@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.irene.geoatencion.Model.Alarma;
 import com.example.irene.geoatencion.Model.Alarmas;
@@ -405,6 +406,10 @@ public class RatingFragment extends Fragment {
                 Log.d("myTag", "This is my message on failure " + call.request().url());
             }
         });
+
+        Toast t=Toast.makeText(getActivity(),"Calificación enviada", Toast.LENGTH_SHORT);
+        t.show();
+
         // Creación de log
         APIService.Factory.getIntance().createLog(
                 "El cliente " + alarma.get(0).getUser().getDisplayName() +

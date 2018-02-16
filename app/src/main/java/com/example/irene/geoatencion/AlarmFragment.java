@@ -2,9 +2,11 @@ package com.example.irene.geoatencion;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.irene.geoatencion.Model.Alarma;
 import com.example.irene.geoatencion.Model.Alarmas;
@@ -30,6 +33,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.example.irene.geoatencion.MapsFragment.cp;
 import static com.example.irene.geoatencion.MapsFragment.routeTime;
 
 
@@ -209,6 +213,9 @@ public class AlarmFragment extends Fragment {
             }
         });
 
+        Toast t=Toast.makeText(getActivity(),"Solicitud cancelada", Toast.LENGTH_SHORT);
+        t.show();
+
         if (network != null){
             network.setStatus("activo");
 
@@ -265,6 +272,39 @@ public class AlarmFragment extends Fragment {
         row1.setVisibility(View.GONE);
         row2.setVisibility(View.GONE);
     }
+
+
+    public AlertDialog createSimpleDialog() {
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(cp);
+        final LayoutInflater inflater = (LayoutInflater)cp.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        View layout = inflater.inflate(R.layout.layout_request, null);
+        builder.setView(layout);
+
+        builder.setTitle("Cancelar solicitud de atención");
+        builder.setMessage("\n¿Está seguro de que desea realizar esta acción?");
+        builder.setPositiveButton("Si, cancelar", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                dialog.cancel();
+                actualizarAlarma();
+            }}
+        );
+
+        builder.setNegativeButton("Volver atrás", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                dialog.cancel();
+            }}
+        );
+
+        return builder.create();
+    }
     public void statusAtencion(){
 
         final TextView status = (TextView) mView.findViewById(R.id.textViewMessage);
@@ -293,7 +333,9 @@ public class AlarmFragment extends Fragment {
         cancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                actualizarAlarma();
+
+                AlertDialog alert = createSimpleDialog();
+                alert.show();
             }
         });
         Log.d("AlarmaFragment", "statusAtencion: "+alarma.get(0));
