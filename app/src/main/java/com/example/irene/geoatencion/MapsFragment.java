@@ -608,7 +608,6 @@ public class MapsFragment extends Fragment {
         View layout = inflater.inflate(R.layout.layout_request, null);
         builder.setView(layout);
 
-
         final TextView status = (TextView) layout.findViewById(R.id.textViewMessage);
         final TextView status1 = (TextView) layout.findViewById(R.id.textViewMessage1);
         final TextView status2 = (TextView) layout.findViewById(R.id.textViewMessage2);
@@ -621,6 +620,8 @@ public class MapsFragment extends Fragment {
         final ImageView imageStatusP3 = (ImageView) layout.findViewById(R.id.imageViewProcesed2);
         final TableRow row = (TableRow) layout.findViewById(R.id.row_status);
         final RelativeLayout message = layout.findViewById(R.id.message);
+        categorias = (GridView) layout.findViewById(R.id.listViewCategorias);
+
         // final Button cancelar = (Button) layout.findViewById(R.id.cancelar);
         //final Button nueva_alarma = (Button) layout.findViewById(R.id.nueva_alarma);
 
@@ -632,57 +633,73 @@ public class MapsFragment extends Fragment {
             }
         });*/
 
-        categorias = (GridView) layout.findViewById(R.id.listViewCategorias);
-
         Log.d("estatus", "createSimpleDialog: "+statusAtencion);
         if (statusAtencion.equals("") || statusAtencion.equals("cancelado por el cliente")) {
 
 
             CategoriaAdapterListView adapter = new CategoriaAdapterListView(c, mId, categoriaServicio, solicitudes);
-            categorias.setAdapter(adapter);
+            if (resultado.size() == 0) {
+                categorias.setVisibility(View.GONE);
+                builder.setTitle("No posee servicios disponibles");
+                builder.setMessage("\nLe invitamos a realizar solicitudes de afiliación a los " +
+                        "organismos, para asi disfrutar de nuestros servicios. " +
+                        "\n\n El equipo de Geoatencion " +
+                        "\n Siempre en contacto con usted");
+                builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
 
-            categorias.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id) {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
-                    Log.i("posicion", "posicion " + position);
-                    categorias.setVisibility(View.GONE);
-                    message.setVisibility(View.VISIBLE);
-                    status.setText("Enviando alarma");
-                    final CategoriaServicios posActual = resultado.get(position);
-                    Log.d("categoria", posActual.getCategory());
-                    APIService.Factory.getIntance()
-                            .createAlarm(posActual.getId(),
-                                    "esperando",
-                                    mCurrentLocation.getLatitude()+"",
-                                    mCurrentLocation.getLongitude()+"",
-                                    address,
-                                    organismos.get(position),
-                                    mId)
+                        dialog.cancel();
+                    }}
+                );
 
-                            .enqueue(new Callback<Alarma>() {
-                                @Override
-                                public void onResponse(Call<Alarma> call, Response<Alarma> response) {
+            }else{
+                categorias.setAdapter(adapter);
 
-                                    //code == 200
-                                    if(response.isSuccessful()) {
-                                        Log.d("my tag", "onResponse: todo fino");
-                                        status.setText("Alarma enviada de manera exitosa");
-                                        imageStatusA.setVisibility(View.GONE);
-                                        imageStatusP.setVisibility(View.VISIBLE);
-                                        progreso.setVisibility(View.GONE);
+                categorias.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id) {
+
+                        Log.i("posicion", "posicion " + position);
+                        categorias.setVisibility(View.GONE);
+                        message.setVisibility(View.VISIBLE);
+                        status.setText("Enviando alarma");
+                        final CategoriaServicios posActual = resultado.get(position);
+                        Log.d("categoria", posActual.getCategory());
+                        APIService.Factory.getIntance()
+                                .createAlarm(posActual.getId(),
+                                        "esperando",
+                                        mCurrentLocation.getLatitude()+"",
+                                        mCurrentLocation.getLongitude()+"",
+                                        address,
+                                        organismos.get(position),
+                                        mId)
+
+                                .enqueue(new Callback<Alarma>() {
+                                    @Override
+                                    public void onResponse(Call<Alarma> call, Response<Alarma> response) {
+
+                                        //code == 200
+                                        if(response.isSuccessful()) {
+                                            Log.d("my tag", "onResponse: todo fino");
+                                            status.setText("Alarma enviada de manera exitosa");
+                                            imageStatusA.setVisibility(View.GONE);
+                                            imageStatusP.setVisibility(View.VISIBLE);
+                                            progreso.setVisibility(View.GONE);
+                                        }
                                     }
-                                }
 
-                                @Override
-                                public void onFailure(Call<Alarma> call, Throwable t){
-                                    //
-                                    Log.d("myTag", "This is my message on failure " + call.request().url());
-                                    status.setText("Error al enviar la alarma");
-                                }
-                            });
-                }
-            });
+                                    @Override
+                                    public void onFailure(Call<Alarma> call, Throwable t){
+                                        //
+                                        Log.d("myTag", "This is my message on failure " + call.request().url());
+                                        status.setText("Error al enviar la alarma");
+                                    }
+                                });
+                    }
+                });
+            }
         }
         else{
             if (statusAtencion.equals("esperando")){
@@ -715,7 +732,7 @@ public class MapsFragment extends Fragment {
                 progreso.setVisibility(View.GONE);
                 categorias.setVisibility(View.GONE);
                 message.setVisibility(View.VISIBLE);
-               //  cancelar.setVisibility(View.VISIBLE);
+                //  cancelar.setVisibility(View.VISIBLE);
                 builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
 
                     @Override
