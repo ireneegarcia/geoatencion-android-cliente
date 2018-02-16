@@ -30,6 +30,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.example.irene.geoatencion.MapsFragment.routeTime;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -306,6 +308,9 @@ public class AlarmFragment extends Fragment {
         else if (alarma.get(0).getStatus().equals("en atencion")){
             status.setText("Alarma enviada de manera exitosa");
             status1.setText("Unidad enviada");
+            if (!status2.equals("")) {
+                status2.setText("Tiempo estimado de llegada: " + routeTime);
+            }
             imageStatusA.setVisibility(View.GONE);
             imageStatusP.setVisibility(View.VISIBLE);
             imageStatusA1.setVisibility(View.GONE);
