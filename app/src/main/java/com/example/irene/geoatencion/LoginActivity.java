@@ -30,6 +30,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.irene.geoatencion.Model.Users;
 import com.example.irene.geoatencion.Remote.APIService;
@@ -176,24 +177,24 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         View focusView = null;
 
         if(TextUtils.isEmpty(password)){
-            mPasswordView.setError(getString(R.string.error_field_required));
+            mPasswordView.setError("Campo necesario");
             focusView = mPasswordView;
             cancel = true;
         }
         // Check for a valid password, if the user entered one.
         if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
+            mPasswordView.setError("Contraseña muy corta");
             focusView = mPasswordView;
             cancel = true;
         }
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
+            mEmailView.setError("Campo necesario");
             focusView = mEmailView;
             cancel = true;
         } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
+            mEmailView.setError("Correo inválido");
             focusView = mEmailView;
             cancel = true;
         }
@@ -322,8 +323,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     Intent intent = new Intent (LoginActivity.this, LoginActivity.class);
                     startActivityForResult(intent, 0);
                     finish();
-                    mEmailView.setError(getString(R.string.error_invalid_email));
-                    mPasswordView.setError(getString(R.string.error_invalid_password));
+                    mEmailView.setError("Correo inválido");
+                    mPasswordView.setError("Contraseña muy corta");
                 }
                 //code == 200
                 if(response.isSuccessful()) {
@@ -348,6 +349,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
 
 
+                } else {
+                    Toast t=Toast.makeText(context,"Correo o contraseña inválida", Toast.LENGTH_SHORT);
+                    t.show();
                 }
             }
 
@@ -416,7 +420,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     }
                 });*/
             } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
+                mPasswordView.setError("Contraseña incorrecta");
                 mPasswordView.requestFocus();
             }
         }
