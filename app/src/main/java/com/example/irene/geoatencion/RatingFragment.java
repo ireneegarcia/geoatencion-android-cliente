@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -166,6 +168,7 @@ public class RatingFragment extends Fragment {
 
     public void mensaje(){
 
+        final TableLayout table_stars = (TableLayout) mView.findViewById(R.id.table_stars);
         final TextView title = (TextView) mView.findViewById(R.id.title);
         final TextView date_alarm = (TextView) mView.findViewById(R.id.date_alarm);
         final TextView unit_alarm = (TextView) mView.findViewById(R.id.unit_alarm);
@@ -181,12 +184,18 @@ public class RatingFragment extends Fragment {
         final ImageButton rating3_3 = (ImageButton) mView.findViewById(R.id.rating3_3);
         final ImageButton rating4_4 = (ImageButton) mView.findViewById(R.id.rating4_4);
         final ImageButton rating5_5 = (ImageButton) mView.findViewById(R.id.rating5_5);
+
+        final TextView rating_text = (TextView) mView.findViewById(R.id.rating_text);
+
         final Button send_button = (Button) mView.findViewById(R.id.send_button);
+
+        final ProgressBar progreso = (ProgressBar) mView.findViewById(R.id.progressBarMessage);
+
+        progreso.setVisibility(View.GONE);
+        title.setVisibility(View.VISIBLE);
 
         if( alarma.size() == 0) {
             title.setText("No tiene pendientes por calificar");
-
-            final TextView rating_text = (TextView) mView.findViewById(R.id.rating_text);
 
             rating_text.setVisibility(View.GONE);
             date_alarm.setVisibility(View.GONE);
@@ -204,6 +213,10 @@ public class RatingFragment extends Fragment {
             rating5_5.setVisibility(View.GONE);
 
         }else{
+
+            table_stars.setVisibility(View.VISIBLE);
+            date_alarm.setVisibility(View.VISIBLE);
+            unit_alarm.setVisibility(View.VISIBLE);
 
             SimpleDateFormat formatI = new SimpleDateFormat("yyy-MM-dd'T'HH:mm:ss", Locale.US);
             SimpleDateFormat formatF = new SimpleDateFormat("yyyy-MM-dd, hh:mm aaa", Locale.US);

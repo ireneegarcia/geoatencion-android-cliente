@@ -13,11 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.irene.geoatencion.Model.Alarma;
 import com.example.irene.geoatencion.Model.Alarmas;
@@ -181,6 +181,9 @@ public class AlarmFragment extends Fragment {
 
     public void actualizarAlarma(){
 
+        final ProgressBar progreso = (ProgressBar) mView.findViewById(R.id.progressBarMessage);
+        progreso.setVisibility(View.VISIBLE);
+
         Alarma enviarAlarma = new Alarma(alarma.get(0).get_id(),
                 alarma.get(0).getUser().getId(),
                 alarma.get(0).getCategoryService(),
@@ -203,6 +206,7 @@ public class AlarmFragment extends Fragment {
                 //code == 200
                 if(response.isSuccessful()) {
                     Log.d("my tag", "onResponse: todo fino");
+                    obtenerAlarmas();
                 }
             }
 
@@ -212,9 +216,6 @@ public class AlarmFragment extends Fragment {
                 Log.d("myTag", "This is my message on failure " + call.request().url());
             }
         });
-
-        Toast t=Toast.makeText(getActivity(),"Solicitud cancelada", Toast.LENGTH_SHORT);
-        t.show();
 
         if (network != null){
             network.setStatus("activo");
@@ -261,7 +262,6 @@ public class AlarmFragment extends Fragment {
             }
         });
 
-        obtenerAlarmas();
     }
 
     public void statusSinAtencion(){
@@ -307,6 +307,7 @@ public class AlarmFragment extends Fragment {
     }
     public void statusAtencion(){
 
+        final ProgressBar progreso = (ProgressBar) mView.findViewById(R.id.progressBarMessage);
         final TextView status = (TextView) mView.findViewById(R.id.textViewMessage);
         final TextView status1 = (TextView) mView.findViewById(R.id.textViewMessage1);
         final TextView status2 = (TextView) mView.findViewById(R.id.textViewMessage2);
@@ -330,6 +331,10 @@ public class AlarmFragment extends Fragment {
         final TextView conductor = (TextView) mView.findViewById(R.id.conductor);
         final TextView telefono = (TextView) mView.findViewById(R.id.telefono);
 
+        tabla_unidad.setVisibility(View.GONE);
+        datos_unidad.setVisibility(View.GONE);
+        imageView3.setVisibility(View.GONE);
+
         cancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -341,6 +346,9 @@ public class AlarmFragment extends Fragment {
         Log.d("AlarmaFragment", "statusAtencion: "+alarma.get(0));
 
         if (alarma.get(0).getStatus().equals("esperando")){
+            progreso.setVisibility(View.GONE);
+            message.setVisibility(View.VISIBLE);
+
             status.setText("Alarma enviada de manera exitosa");
             imageStatusA.setVisibility(View.GONE);
             imageStatusP.setVisibility(View.VISIBLE);
@@ -348,6 +356,9 @@ public class AlarmFragment extends Fragment {
             cancelar.setVisibility(View.VISIBLE);
         }
         else if (alarma.get(0).getStatus().equals("en atencion")){
+            progreso.setVisibility(View.GONE);
+            message.setVisibility(View.VISIBLE);
+
             status.setText("Alarma enviada de manera exitosa");
             status1.setText("Unidad enviada");
             if (!status2.equals("")) {
@@ -373,6 +384,9 @@ public class AlarmFragment extends Fragment {
 
         }
         else if (alarma.get(0).getStatus().equals("cancelado por el operador")){
+            progreso.setVisibility(View.GONE);
+            message.setVisibility(View.VISIBLE);
+
             status.setText("Alarma enviada de manera exitosa");
             status1.setText("Atencion cancelada por el organismo");
             imageStatusA.setVisibility(View.GONE);
@@ -383,6 +397,8 @@ public class AlarmFragment extends Fragment {
             message.setVisibility(View.VISIBLE);
         }
         else if (alarma.get(0).getStatus().equals("cancelado por el cliente")){
+            message.setVisibility(View.VISIBLE);
+
             status.setText("Alarma enviada de manera exitosa");
             status1.setText("Usted ha cancelado esta alarma");
             imageStatusA.setVisibility(View.GONE);
@@ -392,8 +408,12 @@ public class AlarmFragment extends Fragment {
             row.setVisibility(View.GONE);
             cancelar.setVisibility(View.GONE);
             message.setVisibility(View.VISIBLE);
+            progreso.setVisibility(View.GONE);
         }
         else if (alarma.get(0).getStatus().equals("rechazado")){
+            progreso.setVisibility(View.GONE);
+            message.setVisibility(View.VISIBLE);
+
             status.setText("Alarma enviada de manera exitosa");
             status1.setText("Solicitud rechazada");
             imageStatusA.setVisibility(View.GONE);
@@ -404,11 +424,12 @@ public class AlarmFragment extends Fragment {
             message.setVisibility(View.VISIBLE);
         }
         else if (alarma.get(0).getStatus().equals("atendido")){
+            progreso.setVisibility(View.GONE);
+            message.setVisibility(View.VISIBLE);
 
             status.setText("Alarma atendida de manera exitosa");
             imageStatusA.setVisibility(View.GONE);
             imageStatusP.setVisibility(View.VISIBLE);
-
 
             row.setVisibility(View.GONE);
             message.setVisibility(View.VISIBLE);

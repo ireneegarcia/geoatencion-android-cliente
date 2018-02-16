@@ -22,12 +22,22 @@
                 android:layout_height="match_parent"
                 android:padding="15dp">
 
+                <ProgressBar
+                    android:id="@+id/progressBarMessage"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="136dp"
+                    android:layout_marginTop="139dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
+
                 <RelativeLayout
                     android:id="@+id/message"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/textViewTitle"
@@ -323,6 +333,7 @@
                 </TableLayout>
 
             </RelativeLayout>
+
         </LinearLayout>
     </ScrollView>
 

@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.irene.geoatencion.Model.Alarmas;
@@ -80,6 +81,7 @@ public class HistoryFragment extends Fragment {
                 alarma.add(alarmasResponse.get(i));
             }
         }
+
         adaptarVista();
     }
 
@@ -91,6 +93,7 @@ public class HistoryFragment extends Fragment {
         final TextView modelo = (TextView) mView.findViewById(R.id.textView23);
         final TextView color = (TextView) mView.findViewById(R.id.textView16);
         final CardView cardView = (CardView) mView.findViewById(R.id.cardView);
+        final ProgressBar progreso = (ProgressBar) mView.findViewById(R.id.progressBarMessage);
 
         //id del usuario logueado
         SharedPreferences settings = c.getSharedPreferences("perfil", c.MODE_PRIVATE);
@@ -109,6 +112,7 @@ public class HistoryFragment extends Fragment {
                             network = response.body().get(i);
                         }
                     }
+
                     if (network != null) {
                         // Log.d("unidad", "unidad: "+network.getCarCode());
                         cardView.setVisibility(View.VISIBLE);
@@ -138,9 +142,12 @@ public class HistoryFragment extends Fragment {
     public void adaptarVista(){
 
         final CardView cardView = (CardView) mView.findViewById(R.id.cardView);
+        final ProgressBar progreso = (ProgressBar) mView.findViewById(R.id.progressBarMessage);
+        progreso.setVisibility(View.GONE);
 
         if ( alarma.size() != 0) {
             ListView l = (ListView) mView.findViewById(R.id.listViewHistory);
+            l.setVisibility(View.VISIBLE);
             l.setAdapter( new HistoryAdapterList(c,alarma));
             if (alarma.get(0).getStatus().equals("en atencion")) {
                 obtenerNetwork(alarma.get(0));

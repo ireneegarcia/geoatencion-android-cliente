@@ -12,13 +12,24 @@
         android:layout_height="match_parent"
         android:background="@color/common_google_signin_btn_text_dark_default">
 
+        <ProgressBar
+            android:id="@+id/progressBarMessage"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="136dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="139dp" />
+
         <TextView
             android:id="@+id/date_alarm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="24dp"
-            android:text="Fecha de atención:" />
+            android:text="Fecha de atención:"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/unit_alarm"
@@ -28,7 +39,8 @@
             android:layout_alignStart="@+id/date_alarm"
             android:layout_below="@+id/date_alarm"
             android:layout_marginTop="13dp"
-            android:text="Unidad que realizo la atención:" />
+            android:text="Unidad que realizo la atención:"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/title"
@@ -39,14 +51,17 @@
             android:layout_marginTop="103dp"
             android:text="Califica nuestro servicio"
             android:textAlignment="center"
-            android:textSize="25sp" />
+            android:textSize="25sp"
+            android:visibility="gone" />
 
         <TableLayout
+            android:id="@+id/table_stars"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/title"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true">
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/title"
+            android:visibility="gone">
 
             <TableRow
                 android:id="@+id/row_stars"
