@@ -6,6 +6,7 @@ import com.example.irene.geoatencion.Model.CategoriaServicios;
 import com.example.irene.geoatencion.Model.FirebaseToken;
 import com.example.irene.geoatencion.Model.Logs;
 import com.example.irene.geoatencion.Model.Networks;
+import com.example.irene.geoatencion.Model.Organism;
 import com.example.irene.geoatencion.Model.Solicitudes;
 import com.example.irene.geoatencion.Model.Users;
 import com.google.gson.Gson;
@@ -66,6 +67,9 @@ public interface APIService {
 
     @GET("api/solicituds")
     Call<List<Solicitudes>> listSolicituds();
+
+    @GET("api/organisms")
+    Call<List<Organism>> listOrganism();
 
     @GET("api/alarms")
     Call<List<Alarmas>> listAlarms();

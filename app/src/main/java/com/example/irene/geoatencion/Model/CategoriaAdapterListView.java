@@ -21,6 +21,7 @@ import java.util.List;
  */
 
 public class CategoriaAdapterListView extends BaseAdapter {
+    private final List<Organism> organismo;
     private Context context;
     private List<CategoriaServicios> items;
     private String mId;
@@ -28,11 +29,11 @@ public class CategoriaAdapterListView extends BaseAdapter {
     public static ArrayList<String> organismos = new ArrayList<>();
     public static int[] color = {0xFF03899C,0xFF1F6B75,0xFF015965,0xFF36BBCE,0xFF5FC0CE,0xFF6D87D6};
 
-    public CategoriaAdapterListView(Context context, String mId, List<CategoriaServicios> categorias, List<Solicitudes> solicitudes) {
+    public CategoriaAdapterListView(Context context, String mId, List<CategoriaServicios> categorias, List<Solicitudes> solicitudes, List<Organism> organism) {
         //super(context, 0, items);
         this.context = context;
         this.mId = mId;
-
+        this.organismo = organism;
         //Resultado
         this.items = filtrado(mId, categorias, solicitudes);
         // Logs.d("my tag", " "+this.items.size());
@@ -42,26 +43,44 @@ public class CategoriaAdapterListView extends BaseAdapter {
         // ArrayList<CategoriaServicios> resultado = new ArrayList<CategoriaServicios>();
 
         resultado = new ArrayList<CategoriaServicios>();
-        //Log.d("solicitudes", solicitudes.size()+"");
-        //Se filtran de todas las categorías cuales puede consumir el usuario logueado
-        if (solicitudes!=null)
-        for (int i = 0; i< solicitudes.size(); i++){
-            //Solicitudes del usuario y que esten aceptadas = afiliaciones
-            if(solicitudes.get(i).getUser().getId().equals(mId) && solicitudes.get(i).getStatus().equals("aceptado")){
-                //Log.d("solicitudes", solicitudes.get(i).toString());
-                for (int j = 0; j < categorias.size(); j++){
-                    if(solicitudes.get(i).getCategory().equals(categorias.get(j).getId())){
-                        //Logs.d("my tag", ""+categorias.get(j));
-                        resultado.add(categorias.get(j));
-                        organismos.add(solicitudes.get(i).getOrganism());
-                    }
-                }
 
+        //Se filtran de todas las categorías cuales puede consumir el usuario logueado
+        if (solicitudes != null)
+            for (int i = 0; i< solicitudes.size(); i++){
+                //Solicitudes del usuario y que esten aceptadas = afiliaciones
+                Log.d("resultado", " organismo"+solicitudes.get(i).getOrganism());
+                Log.d("resultado", " activo=?"+organismoIsActive(solicitudes.get(i).getOrganism()));
+                if(solicitudes.get(i).getUser().getId().equals(mId)
+                        && solicitudes.get(i).getStatus().equals("aceptado")
+                        && organismoIsActive(solicitudes.get(i).getOrganism())){
+
+                    for (int j = 0; j < categorias.size(); j++){
+                        if(solicitudes.get(i).getCategory().equals(categorias.get(j).getId())){
+
+                            resultado.add(categorias.get(j));
+                            organismos.add(solicitudes.get(i).getOrganism());
+                        }
+                    }
+
+                }
             }
-        }
-        Log.d("my tag", "resultado "+resultado);
+
         return resultado;
     }
+
+    public boolean organismoIsActive(String organismoSelected){
+
+        if(!organismoSelected.equals("")){
+            for (int i= 0; i < organismo.size(); i++){
+                if(organismo.get(i).get_id().equals(organismoSelected)
+                        && organismo.get(i).getIsActive().equals("activo")){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     @Override
     public int getCount() {
         return this.items.size();

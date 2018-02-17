@@ -41,6 +41,7 @@ import com.example.irene.geoatencion.Model.CategoriaServicios;
 import com.example.irene.geoatencion.Model.Logs;
 import com.example.irene.geoatencion.Model.Networks;
 import com.example.irene.geoatencion.Model.NotificationFirebase;
+import com.example.irene.geoatencion.Model.Organism;
 import com.example.irene.geoatencion.Model.RouteGet;
 import com.example.irene.geoatencion.Model.RouteSet;
 import com.example.irene.geoatencion.Model.Solicitudes;
@@ -90,6 +91,7 @@ public class MapsFragment extends Fragment {
 
     public static List<CategoriaServicios> categoriaServicio;
     List<Solicitudes> solicitudes;
+    List<Organism> organism;
     ArrayList<Alarmas> alarma = new ArrayList<>();
     Networks network;
     MapView mMapView;
@@ -365,6 +367,22 @@ public class MapsFragment extends Fragment {
             public void onFailure(Call<List<CategoriaServicios>> call, Throwable t) {
             }
         });
+
+
+
+        APIService.Factory.getIntance().listOrganism().enqueue(new Callback<List<Organism>>() {
+            @Override
+            public void onResponse(Call<List<Organism>> call, Response<List<Organism>> response) {
+
+                if(response.isSuccessful()) {
+                    organism = response.body();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Organism>> call, Throwable t) {
+            }
+        });
     }
 
     public void obtenerAlarmas(){
@@ -637,7 +655,7 @@ public class MapsFragment extends Fragment {
         if (statusAtencion.equals("") || statusAtencion.equals("cancelado por el cliente")) {
 
 
-            CategoriaAdapterListView adapter = new CategoriaAdapterListView(c, mId, categoriaServicio, solicitudes);
+            CategoriaAdapterListView adapter = new CategoriaAdapterListView(c, mId, categoriaServicio, solicitudes, organism);
             if (resultado.size() == 0) {
                 categorias.setVisibility(View.GONE);
                 builder.setTitle("No posee servicios disponibles");
