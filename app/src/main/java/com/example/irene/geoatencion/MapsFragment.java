@@ -47,6 +47,7 @@ import com.example.irene.geoatencion.Model.RouteSet;
 import com.example.irene.geoatencion.Model.Solicitudes;
 import com.example.irene.geoatencion.Remote.APIService;
 import com.example.irene.geoatencion.Remote.APIServiceRoute;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
@@ -115,6 +116,9 @@ public class MapsFragment extends Fragment {
     RouteSet routeSet = new RouteSet();
     RouteGet routeGet = new RouteGet();
     static String routeTime = "";
+
+    // para realizar zoom por primera vez
+    public Boolean isprocess = false;
 
     public MapsFragment() {
         // Required empty public constructor
@@ -869,8 +873,11 @@ public class MapsFragment extends Fragment {
         mapMarker.setTitle("Mi posición actual");
         Log.d("my tag", "Marcador añadido.............................");
         // For zooming automatically to the location of the marker
-       /* googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng,
-                14));*/
+        if (isprocess == false) {
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng,
+                    14));
+            isprocess = true;
+        }
         Log.d("my tag", "Zoom hecho.............................");
 
         /*googleMap.addMarker(new MarkerOptions().position(currentLatLng)
